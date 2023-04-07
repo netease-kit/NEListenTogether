@@ -39,21 +39,21 @@
 │   │   
 │   │
 ├── NEListenTogetherUIKit              # 一起听UI视图
-│   ├── NEListenTogetherRoomListViewController # 语聊房列表视图控制器
+│   ├── NEListenTogetherRoomListViewController # 一起听列表视图控制器
 │   │   ├── NEListenTogetherUIEmptyListView   # 空列表提示视图
-│   │   └── NEListenTogetherUILiveListCell    # 语聊歌房信息预览
+│   │   └── NEListenTogetherUILiveListCell    # 一起听歌房信息预览
 │   │
-│   ├── NEListenTogetherOpenRoomViewController # 创建语聊房视图控制器
+│   ├── NEListenTogetherOpenRoomViewController # 创建一起听视图控制器
 │   │   ├── NEListenTogetherUICreateRoomNameView #创建房间视图
 │   │   └── UIButton                             # 创建房间按钮
 │   │
 │   │
 │   │
 │   │
-│   ├──NEListenTogetherViewController   #语聊房视图控制器
-│   │   ├── NEListenTogetherViewController+Seat #语聊房麦位相关逻辑
-│   │   ├── NEListenTogetherViewController+UI #语聊房布局相关
-│   │   ├── NEListenTogetherViewController+Utils #语聊房其他逻辑
+│   ├──NEListenTogetherViewController   #一起听视图控制器
+│   │   ├── NEListenTogetherViewController+Seat #一起听麦位相关逻辑
+│   │   ├── NEListenTogetherViewController+UI #一起听布局相关
+│   │   ├── NEListenTogetherViewController+Utils #一起听其他逻辑
 │   │   ├── NEListenTogetherHeaderView                  # 头部视图
 │   │   ├── NEListenTogetherFooterView                  # 底部工具栏，包含输入框等控件
 │   │   ├── NEListenTogetherChatView                    # 聊天室视图，显示系统通知消息、普通文本消息以及礼物息
@@ -65,7 +65,7 @@
 │   │   ├── NEListenTogetherPickSongView                       # 歌曲列表视图
 │   │   ├── PlayingStatus                       # 播放状态
 │   │   ├── PlayingAction                       # 歌曲下载完成状态标记位，歌曲基于何种操作下开始
-│   │   └── NEListenTogetherInfo                        # 语聊房信息
+│   │   └── NEListenTogetherInfo                        # 一起听信息
 │   │   
 ├── NEOrderSong                        # 点歌台相关封装，NEVoiceroomUIKit 使用
 │    ├── NEOrderSong                    # 单例对象
@@ -101,23 +101,23 @@
 ├── NEVoiceRoomExample                 # 项目入口
 │
 └── NEVoiceRoomUIKit                   #
-    ├── NEOpenRoomViewController                   # 创建语聊房视图控制器
+    ├── NEOpenRoomViewController                   # 创建一起听视图控制器
     │    ├── NEUICreateRoomNameView                 # 房间名输入框
     │    └── UIButton                               # 创建房间按钮
-    ├── NEVoiceRoomViewController                  # 语聊房视图控制器
-    │   ├── NEVoiceRoomViewController+Seat         # 语聊房麦位相关逻辑
-    │   ├── NEVoiceRoomViewController+UI           # 语聊房布局相关
-    │   ├── NEVoiceRoomViewController+Utils        # 语聊房其他逻辑
+    ├── NEVoiceRoomViewController                  # 一起听视图控制器
+    │   ├── NEVoiceRoomViewController+Seat         # 一起听麦位相关逻辑
+    │   ├── NEVoiceRoomViewController+UI           # 一起听布局相关
+    │   ├── NEVoiceRoomViewController+Utils        # 一起听其他逻辑
     │   ├── NEVoiceRoomHeaderView                  # 头部视图
     │   ├── NEVoiceRoomFooterView                  # 底部工具栏，包含输入框等控件
     │   ├── NEVoiceRoomChatView                    # 聊天室视图，显示系统通知消息、普通文本消息以及礼物息
     │   ├── NEUIKeyboardToolbarView                # 聊天室文本输入框
     │   ├── NEUIConnectListView                    # 主播顶部弹框
     │   ├── NEUIMicQueueView                       # 麦位视图
-    │   └── NEVoiceRoomInfo                        # 语聊房信息
-    └── NEChatRoomListViewController               # 语聊房列表视图控制器
+    │   └── NEVoiceRoomInfo                        # 一起听信息
+    └── NEChatRoomListViewController               # 一起听列表视图控制器
         ├── NEUIEmptyListView                      # 空列表提示视图
-        └── NEUILiveListCell                       # 语聊歌房信息预览
+        └── NEUILiveListCell                       # 一起听歌房信息预览
 
  ```
  # 开发环境要求
@@ -139,7 +139,7 @@
 
 # 运行示例项目
 注意：
- * 在线 K 歌的示例源码仅供开发者接入参考，实际应用开发场景中，请结合具体业务需求修改使用。
+ * 一起听的示例源码仅供开发者接入参考，实际应用开发场景中，请结合具体业务需求修改使用。
  * 若您计划将源码用于生产环境，请确保应用正式上线前已经过全面测试，以免因兼容性等问题造成损失。
  
 1. 克隆示例项目源码仓库至您本地工程。
