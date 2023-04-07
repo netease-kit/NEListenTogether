@@ -149,7 +149,7 @@ pod 'NEListenTogetherKit'
 ```
 3. 打开终端，在 Podfile 所在文件夹中执行如下命令进行安装：
 ```
-     pod update
+pod update
 ```
 4. 完成安装后，通过 Xcode 打开 xxx.xcworkspace 工程
 5.在 ListenTogetherKit/ListenTogetherExample/ListenTogether/AppEnv/Define/AppKey.h中，替换您自己的 App Key，获取 App Key 的方法请参见获取 App Key。并填写 accountId 和  accessToken 值
