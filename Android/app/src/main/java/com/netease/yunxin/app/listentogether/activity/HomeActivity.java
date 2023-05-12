@@ -40,9 +40,6 @@ public class HomeActivity extends BasePartyActivity {
     initViews();
   }
 
-  @Override
-  protected void onLogin() {}
-
   private void initViews() {
     binding.vpFragment.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
     binding.vpFragment.setOffscreenPageLimit(2);
@@ -78,11 +75,6 @@ public class HomeActivity extends BasePartyActivity {
     super.onDestroy();
     curTabIndex = -1;
     ALog.flush(true);
-  }
-
-  @Override
-  protected void onKickOut() {
-    ALog.d(TAG, "kick out");
   }
 
   private void login(String account, String token) {

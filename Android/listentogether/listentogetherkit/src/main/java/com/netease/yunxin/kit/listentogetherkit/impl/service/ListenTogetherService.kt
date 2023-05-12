@@ -190,7 +190,7 @@ internal class ListenTogetherService {
                                 TAG,
                                 "joinRtcChannel failed roomUuid = $roomUuid error code = $code message = $message"
                             )
-                            leaveRtcChannel(null)
+                            currentRoomContext?.leaveRoom(object : NECallback2<Unit?>() {})
                             callback.onError(code, message)
                         }
                     })

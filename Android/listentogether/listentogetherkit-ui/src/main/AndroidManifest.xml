@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.netease.yunxin.kit.listentogether">
+    package="com.netease.yunxin.kit.listentogetherkit.ui">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -12,23 +12,23 @@
         tools:targetApi="31">
 
         <activity
-            android:name="com.netease.yunxin.app.listentogether.activity.ListenTogetherRoomListActivity"
+            android:name="com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherRoomListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
 
-        <activity android:name="com.netease.yunxin.app.listentogether.activity.ListenTogetherCreateActivity"
+        <activity android:name="com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherCreateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             />
 
-        <activity android:name="com.netease.yunxin.app.listentogether.activity.ListenTogetherAnchorActivity"
+        <activity android:name="com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherAnchorActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             />
-        <activity android:name="com.netease.yunxin.app.listentogether.activity.ListenTogetherAudienceActivity"
+        <activity android:name="com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherAudienceActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:exported="false"
@@ -36,7 +36,7 @@
             />
 
         <service
-            android:name="com.netease.yunxin.app.listentogether.service.KeepAliveService"
+            android:name="com.netease.yunxin.kit.listentogetherkit.ui.service.KeepAliveService"
             android:foregroundServiceType="mediaProjection"/>
     </application>
 

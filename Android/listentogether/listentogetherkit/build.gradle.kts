@@ -27,9 +27,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.google.code.gson:gson:2.9.0")
 
-    implementation("com.netease.yunxin.kit.common:common:1.1.15")
+    implementation("com.netease.yunxin.kit.common:common:1.1.18")
     implementation("com.netease.yunxin.kit.common:common-network:1.1.8")
-    implementation("com.netease.yunxin.kit.room:roomkit:1.12.1")
+    implementation("com.netease.yunxin.kit.room:roomkit:1.14.0")
     implementation("com.netease.yunxin.kit.core:corekit:1.3.0")
 }
 
