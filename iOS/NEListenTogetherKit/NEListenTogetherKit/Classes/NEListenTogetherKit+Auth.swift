@@ -105,15 +105,14 @@ public extension NEListenTogetherKit {
 
 extension NEListenTogetherKit: NEAuthListener {
   public func onAuthEvent(evt: NEAuthEvent) {
-    DispatchQueue.main.async {
-      self.reset()
-      for pointerListener in self.authListeners.allObjects {
-        guard pointerListener is NEListenTogetherAuthListener, let listener = pointerListener as? NEListenTogetherAuthListener else { continue }
-
-        if listener.responds(to: #selector(NEListenTogetherAuthListener.onVoiceRoomAuthEvent(_:))) {
-          listener
-            .onVoiceRoomAuthEvent?(NEListenTogetherAuthEvent(rawValue: evt.rawValue) ?? .loggedOut)
-        }
+    if evt != .loggedIn {
+      reset()
+    }
+    for pointerListener in authListeners.allObjects {
+      guard let listener = pointerListener as? NEListenTogetherAuthListener else { continue }
+      if listener.responds(to: #selector(NEListenTogetherAuthListener.onVoiceRoomAuthEvent(_:))) {
+        listener
+          .onVoiceRoomAuthEvent?(NEListenTogetherAuthEvent(rawValue: evt.rawValue) ?? .loggedOut)
       }
     }
   }

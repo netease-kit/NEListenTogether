@@ -221,11 +221,8 @@
 
 - (LOTAnimationView *)waitSeekView {
   if (!_waitSeekView) {
-    NSString *path = [[NSBundle mainBundle]
-        pathForResource:@"Frameworks/NEListenTogetherUIKit.framework/NEListenTogetherUIKit"
-                 ofType:@"bundle"];
     _waitSeekView = [LOTAnimationView animationNamed:@"self_wait_data"
-                                            inBundle:[NSBundle bundleWithPath:path]];
+                                            inBundle:[NSBundle bundleForClass:self.class]];
     _waitSeekView.alpha = 0;
   }
   return _waitSeekView;

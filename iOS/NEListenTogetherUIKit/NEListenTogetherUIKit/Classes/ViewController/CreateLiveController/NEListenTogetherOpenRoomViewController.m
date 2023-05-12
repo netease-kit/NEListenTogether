@@ -155,7 +155,11 @@
   params.liveType = NEListenTogetherLiveRoomTypeListen_together;
   params.seatCount = 2;
   params.cover = self.createRoomNameView.getRoomBgImageUrl;
+#ifdef DEBUG
+  params.configId = 79;
+#else
   params.configId = 570;
+#endif
   if ([[[NEListenTogetherUIManager sharedInstance].config.extras objectForKey:@"serverUrl"]
           isEqualToString:@"https://roomkit-sg.netease.im"]) {
     params.configId = 76;

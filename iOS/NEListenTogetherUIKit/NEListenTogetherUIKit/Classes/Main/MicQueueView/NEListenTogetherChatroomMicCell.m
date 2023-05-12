@@ -157,12 +157,9 @@
 
 - (NELottieView *)lottieView {
   if (!_lottieView) {
-    NSString *path = [[NSBundle mainBundle]
-        pathForResource:@"Frameworks/NEListenTogetherUIKit.framework/NEListenTogetherUIKit"
-                 ofType:@"bundle"];
     _lottieView = [[NELottieView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)
                                                lottie:@"speak_wave"
-                                               bundle:[NSBundle bundleWithPath:path]];
+                                               bundle:[NSBundle bundleForClass:[self class]]];
     [_lottieView stop];
   }
   return _lottieView;
