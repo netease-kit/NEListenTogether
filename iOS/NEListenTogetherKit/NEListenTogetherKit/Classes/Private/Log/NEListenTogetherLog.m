@@ -11,7 +11,7 @@ static XKitLog *_log = nil;
 + (void)setUp:(NSString *)appkey {
   XKitLogOptions *options = [[XKitLogOptions alloc] init];
   options.level = XKitLogLevelInfo;
-  options.moduleName = @"VoiceRoom";
+  options.moduleName = @"ListenTogether";
   options.sensitives = @[ appkey ];
   _log = [XKitLog setUp:options];
 }

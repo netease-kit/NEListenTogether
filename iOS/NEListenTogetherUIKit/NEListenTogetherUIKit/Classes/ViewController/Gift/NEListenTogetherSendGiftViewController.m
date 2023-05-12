@@ -55,6 +55,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  UIColor *backgroundColor = [UIColor colorWithRed:0.192 green:0.239 blue:0.235 alpha:1];
   /// 设置背景色
   if (@available(iOS 13.0, *)) {
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
@@ -66,37 +67,29 @@
 
     // 去除底部黑线
     [appearance setShadowImage:[UIImage new]];
-
-    UIColor *color = UIColor.clearColor;
-    appearance.backgroundColor = color;
+    appearance.backgroundColor = backgroundColor;
 
     self.navigationController.navigationBar.standardAppearance = appearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
   } else {
-    // Fallback on earlier versions
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.barTintColor = backgroundColor;
+    self.navigationController.navigationBar.translucent = NO;
   }
 
   self.title = NELocalizedString(@"送礼物");
   [self.navigationController.navigationBar
       setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}];
-
-  UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-  UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
-  effectView.backgroundColor = [UIColor colorWithRed:0.192 green:0.239 blue:0.235 alpha:0.5];
-  effectView.layer.cornerRadius = 10;
-  effectView.layer.masksToBounds = YES;
-  [self.view addSubview:effectView];
-  [effectView mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.left.right.top.bottom.equalTo(self.view);
-  }];
+  self.view.backgroundColor = backgroundColor;
 
   // 导航栏下面画个分割线
   CAShapeLayer *lineLayer = [[CAShapeLayer alloc] init];
   lineLayer.strokeColor = [UIColor colorWithRed:0.371 green:0.371 blue:0.371 alpha:0.3].CGColor;
   lineLayer.lineWidth = 1.0;
   CGMutablePathRef path = CGPathCreateMutable();
-  CGPathMoveToPoint(path, NULL, 0, 49);
-  CGPathAddLineToPoint(path, NULL, self.view.frame.size.width, 49);
+  CGPathMoveToPoint(path, NULL, 0, 5);
+  CGPathAddLineToPoint(path, NULL, self.view.frame.size.width, 5);
   lineLayer.path = path;
   [self.view.layer addSublayer:lineLayer];
 
@@ -106,7 +99,7 @@
 - (void)setupSubView {
   [self.view addSubview:self.collectionView];
   [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.top.equalTo(self.view).offset(16 + 48);
+    make.top.equalTo(self.view).offset(16);
     make.left.right.equalTo(self.view);
     make.height.mas_equalTo(136);
   }];

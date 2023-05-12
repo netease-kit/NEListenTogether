@@ -10,15 +10,6 @@
 
 + (UIImage *)voiceRoom_imageNamed:(NSString *)name {
   return [NEListenTogetherUI ne_listen_imageName:name];
-
-  NSString *path = [[NSBundle mainBundle]
-      pathForResource:@"Frameworks/NEListenTogetherUIKit.framework/NEListenTogetherUIKit"
-               ofType:@"bundle"];
-  NSBundle *bundle = [NSBundle bundleWithPath:path];
-  if (!bundle) {
-    bundle = [NSBundle mainBundle];
-  }
-  return [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
 }
 
 @end

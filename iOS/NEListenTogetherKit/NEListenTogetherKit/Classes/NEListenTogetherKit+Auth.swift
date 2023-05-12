@@ -33,21 +33,12 @@ public extension NEListenTogetherKit {
   ///   - callback: 回调
   func login(_ account: String,
              token: String,
-             resumeLogin: Bool = false,
              callback: NEListenTogetherCallback<AnyObject>? = nil) {
     NEListenTogetherLog.apiLog(kitTag, desc: "Login. Account: \(account). Token: \(token)")
 
     guard NEListenTogetherKit.getInstance().isInitialized else {
       NEListenTogetherLog.errorLog(kitTag, desc: "Failed to login. Uninitialized.")
       callback?(NEListenTogetherErrorCode.failed, "Failed to login. Uninitialized.", nil)
-      return
-    }
-    if resumeLogin {
-      NE.addHeader([
-        "user": account,
-        "token": token,
-      ])
-      callback?(NEListenTogetherErrorCode.success, nil, nil)
       return
     }
     NERoomKit.shared().authService.login(account: account,
