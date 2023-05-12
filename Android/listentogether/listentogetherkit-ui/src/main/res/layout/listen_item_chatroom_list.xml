@@ -10,7 +10,7 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
-    <com.netease.yunxin.app.listentogether.widget.HeadImageView
+    <com.netease.yunxin.kit.listentogetherkit.ui.widget.HeadImageView
         android:id="@+id/headview"
         android:layout_width="32dp"
         android:layout_height="32dp" />

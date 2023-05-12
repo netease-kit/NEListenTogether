@@ -10,12 +10,12 @@ import android.content.Intent;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.netease.yunxin.app.listentogether.activity.CommonSettingActivity;
-import com.netease.yunxin.app.listentogether.activity.ListenTogetherRoomListActivity;
 import com.netease.yunxin.app.listentogether.config.AppConfig;
 import com.netease.yunxin.kit.entertainment.common.Constants;
 import com.netease.yunxin.kit.entertainment.common.R;
 import com.netease.yunxin.kit.entertainment.common.RoomConstants;
 import com.netease.yunxin.kit.entertainment.common.activity.WebViewActivity;
+import com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherRoomListActivity;
 
 public class ListenTogetherNavUtils {
 

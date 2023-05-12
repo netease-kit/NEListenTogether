@@ -23,7 +23,7 @@
         android:background="@drawable/listen_point_empty"
         android:visibility="visible" />
 
-    <com.netease.yunxin.app.listentogether.widget.HeadImageView
+    <com.netease.yunxin.kit.listentogetherkit.ui.widget.HeadImageView
         android:id="@+id/iv_user_avatar"
         android:layout_width="wrap_content"
         android:visibility="visible"

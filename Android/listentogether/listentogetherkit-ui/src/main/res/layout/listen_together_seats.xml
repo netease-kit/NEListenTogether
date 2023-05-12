@@ -73,7 +73,7 @@
             <FrameLayout
                 android:layout_width="110dp"
                 android:layout_height="wrap_content">
-                <com.netease.yunxin.app.listentogether.widget.SeatView
+                <com.netease.yunxin.kit.listentogetherkit.ui.widget.SeatView
                     android:id="@+id/seat_anchor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
             <FrameLayout
                 android:layout_width="110dp"
                 android:layout_height="wrap_content">
-                <com.netease.yunxin.app.listentogether.widget.SeatView
+                <com.netease.yunxin.kit.listentogetherkit.ui.widget.SeatView
                     android:id="@+id/seat_audience"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
