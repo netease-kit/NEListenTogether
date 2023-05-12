@@ -13,16 +13,14 @@ public extension NEListenTogetherKit {
   ///   - pageNum: 页码
   ///   - pageSize: 页大小
   ///   - callback: 房间列表回调
-  func getVoiceRoomList(_ type: Int = 2,
-                        liveState: NEListenTogetherLiveState,
-                        pageNum: Int,
-                        pageSize: Int,
-                        callback: NEListenTogetherCallback<NEListenTogetherList>? = nil) {
+  func getRoomList(_ liveState: NEListenTogetherLiveState,
+                   pageNum: Int,
+                   pageSize: Int,
+                   callback: NEListenTogetherCallback<NEListenTogetherList>? = nil) {
     NEListenTogetherLog.apiLog(kitTag, desc: "Room List.")
     Judge.initCondition({
-      self.roomService.getVoiceRoomList(
-        type,
-        liveState: liveState.rawValue,
+      self.roomService.getRoomList(
+        liveState.rawValue,
         pageNum: pageNum,
         pageSize: pageSize
       ) { list in
@@ -51,7 +49,7 @@ public extension NEListenTogetherKit {
         )
         callback?(NEListenTogetherErrorCode.success, nil, NEListenTogetherInfo(create: info))
       }
-        failure: { error in
+      failure: { error in
         NEListenTogetherLog.errorLog(
           kitTag,
           desc: "Failed to get room list. Code: \(error.code). Msg: \(error.localizedDescription)"
@@ -326,6 +324,7 @@ extension NEListenTogetherKit {
     joinParams.userName = userName
     joinParams.role = role
     let joinOptions = NEJoinRoomOptions()
+    joinOptions.enableMyAudioDeviceOnJoinRtc = true
     NERoomKit.shared().roomService.joinRoom(params: joinParams,
                                             options: joinOptions) { [weak self] joinCode, joinMsg, context in
       guard let self = self else { return }

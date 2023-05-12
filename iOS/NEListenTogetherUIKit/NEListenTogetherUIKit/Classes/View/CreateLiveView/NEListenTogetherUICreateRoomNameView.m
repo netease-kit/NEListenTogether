@@ -146,6 +146,9 @@
     [textView resignFirstResponder];
     return NO;
   }
+  if (textView.text.length >= text.length) {
+    return YES;
+  }
   NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
   return newString.length <= 20;  // 限制 20字符
 }

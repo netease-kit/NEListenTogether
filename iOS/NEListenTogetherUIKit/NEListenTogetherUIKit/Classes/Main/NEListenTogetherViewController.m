@@ -56,6 +56,7 @@
   return self;
 }
 - (void)dealloc {
+  [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
   [NEListenTogetherKit.getInstance removeVoiceRoomListener:self];
   [self destroyNetworkObserver];
   [[NEListenTogetherPickSongEngine sharedInstance] removeObserve:self];
@@ -68,7 +69,7 @@
 }
 - (void)viewDidLoad {
   [super viewDidLoad];
-
+  [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
   if ([[NEListenTogetherUIManager sharedInstance].delegate
           respondsToSelector:@selector(onListenTogetherJoinRoom)]) {
     [[NEListenTogetherUIManager sharedInstance].delegate onListenTogetherJoinRoom];
@@ -93,6 +94,12 @@
 }
 
 - (void)closeRoom {
+  /// 目前存在内存泄露...导致回调未抛出，所以先处理保证回调抛出。
+  if ([[NEListenTogetherUIManager sharedInstance].delegate
+          respondsToSelector:@selector(onListenTogetherLeaveRoom)]) {
+    [[NEListenTogetherUIManager sharedInstance].delegate onListenTogetherLeaveRoom];
+  }
+
   if (self.role == NEListenTogetherRoleHost) {  // 主播
     [NEListenTogetherKit.getInstance
         endRoom:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {

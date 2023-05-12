@@ -35,7 +35,7 @@
     self.transitioning = [[NEListenTogetherUIActionSheetTransitioningDelegate alloc] init];
     self.modalPresentationStyle = UIModalPresentationCustom;
     self.transitioningDelegate = self.transitioning;
-    if (@available(iOS 15.0, *)) {
+    if (@available(iOS 13.0, *)) {
       UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
 
       [appearance configureWithOpaqueBackground];

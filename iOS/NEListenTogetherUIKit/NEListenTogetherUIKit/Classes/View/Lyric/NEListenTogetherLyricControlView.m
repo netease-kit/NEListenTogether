@@ -189,9 +189,9 @@
   if (!_pauseBtn) {
     _pauseBtn = [[NEListenTogetherControlButton alloc] initWithFrame:self.frame];
     _pauseBtn.enable = true;
-    _pauseBtn.title = @"暂停";
+    _pauseBtn.title = NELocalizedString(@"暂停");
     _pauseBtn.icon = [NEListenTogetherUI ne_listen_imageName:@"pause_icon"];
-    _pauseBtn.selectedTitle = @"播放";
+    _pauseBtn.selectedTitle = NELocalizedString(@"播放");
     _pauseBtn.selectedIcon = [NEListenTogetherUI ne_listen_imageName:@"resume_icon"];
     _pauseBtn.selected = !self.isPlaying;
     @weakify(self)[_pauseBtn addAction:^(NEListenTogetherControlButton *button) {
@@ -214,7 +214,7 @@
   if (!_nextBtn) {
     _nextBtn = [[NEListenTogetherControlButton alloc] initWithFrame:self.frame];
     _nextBtn.enable = true;
-    _nextBtn.title = @"切歌";
+    _nextBtn.title = NELocalizedString(@"切歌");
     _nextBtn.icon = [NEListenTogetherUI ne_listen_imageName:@"next"];
     @weakify(self)[_nextBtn addAction:^(NEListenTogetherControlButton *button) {
       @strongify(self) if ([self.delegate respondsToSelector:@selector(nextSongWithView:)]) {

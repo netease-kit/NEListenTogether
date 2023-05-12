@@ -19,19 +19,14 @@
   }
 }
 - (void)vr_setupLoginSDK {
-  [[NEListenTogetherUIManager sharedInstance]
-   loginWithAccount:accountId
-   token:accessToken
-   nickname:@"nickname"
-   resumeLogin:NO
-   callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj){
-    if (code == 0) {
-      /// 登录后初始化点歌台的配置
-      [[NEOrderSong getInstance] loginInitConfig:accountId
-                                           token:accessToken
-                                        callback:nil];
-    }
-  }];
+    [[NEListenTogetherUIManager sharedInstance] loginWithAccount:accountId token:accessToken nickname:@"nickName" callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
+        if (code == 0) {
+          /// 登录后初始化点歌台的配置
+          [[NEOrderSong getInstance] loginInitConfig:accountId
+                                               token:accessToken
+                                            callback:nil];
+        }
+      }];
 }
 
 - (void)vr_setupVoiceRoom {

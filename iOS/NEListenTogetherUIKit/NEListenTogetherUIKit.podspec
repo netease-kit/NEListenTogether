@@ -45,9 +45,9 @@ Pod::Spec.new do |s|
   s.dependency 'NEAudioEffectKit'
   s.dependency 'LottieSwift'
   s.dependency 'NECoreKit'
-  
-  s.resource_bundles = {
-    'NEListenTogetherUIKit' => ['NEListenTogetherUIKit/Assets/**/*']
-  }
+  s.resource = 'NEListenTogetherUIKit/Assets/**/*'
+#  s.resource_bundles = {
+#    'NEListenTogetherUIKit' => ['NEListenTogetherUIKit/Assets/**/*']
+#  }
   s.frameworks = 'UIKit'
 end

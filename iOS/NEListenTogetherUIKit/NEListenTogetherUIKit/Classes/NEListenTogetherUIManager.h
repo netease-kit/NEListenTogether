@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger, NEListenTogetherClientEvent) {
   /// 被踢出登录
   NEListenTogetherClientEventKicOut,
-  /// 授权过期
-  NEListenTogetherClientEventUnauthorized,
   /// 服务器禁止登录
   NEListenTogetherClientEventForbidden,
   /// 账号或密码错误
@@ -56,7 +54,6 @@ typedef NS_ENUM(NSInteger, NEListenTogetherClientEvent) {
 - (void)loginWithAccount:(NSString *)account
                    token:(NSString *)token
                 nickname:(NSString *)nickname
-             resumeLogin:(BOOL)resumeLogin
                 callback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback;
 
 - (void)logoutWithCallback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback;
