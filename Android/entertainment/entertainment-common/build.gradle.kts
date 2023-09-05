@@ -29,7 +29,6 @@ dependencies {
     api("com.netease.yunxin.kit.common:common-network:1.1.8")
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("com.airbnb.android:lottie:5.0.3")
-    implementation("com.netease.yunxin:nertc-base:5.4.8")
 
 
     implementation("com.netease.yunxin.kit.common:common-ui:1.3.1")

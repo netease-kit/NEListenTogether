@@ -43,7 +43,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.netease.yunxin.kit.copyrightedmedia:copyrightedmedia:1.7.0")
     implementation("com.netease.yunxin.kit.room:roomkit:1.20.0")
-    implementation("com.netease.yunxin:nertc-base:5.4.8")
     implementation(project(":voiceroomkit:voiceroomkit"))
 
 }
