@@ -23,7 +23,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.gyf.immersionbar.ImmersionBar;
 import com.netease.yunxin.kit.common.utils.SizeUtils;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 
@@ -75,7 +74,6 @@ public class TopTipsDialog extends BaseDialogFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    ImmersionBar.with(this).statusBarDarkFont(false).init();
   }
 
   @Override

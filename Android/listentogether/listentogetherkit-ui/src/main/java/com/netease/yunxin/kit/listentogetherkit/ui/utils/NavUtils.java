@@ -8,17 +8,17 @@ import android.content.Context;
 import android.content.Intent;
 import com.netease.yunxin.kit.entertainment.common.RoomConstants;
 import com.netease.yunxin.kit.entertainment.common.model.RoomModel;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomInfo;
 import com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherAnchorActivity;
 import com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherAudienceActivity;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.ListenTogetherRoomModel;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomInfo;
 
 public class NavUtils {
 
   private static final String TAG = "NavUtil";
 
   public static void toListenTogetherRoomPage(
-      Context context, String username, String avatar, NEListenTogetherRoomInfo roomInfo) {
+      Context context, String username, String avatar, NEVoiceRoomInfo roomInfo) {
     ListenTogetherRoomModel roomModel = new ListenTogetherRoomModel();
     roomModel.setLiveRecordId(roomInfo.getLiveModel().getLiveRecordId());
     roomModel.setRoomUuid(roomInfo.getLiveModel().getRoomUuid());

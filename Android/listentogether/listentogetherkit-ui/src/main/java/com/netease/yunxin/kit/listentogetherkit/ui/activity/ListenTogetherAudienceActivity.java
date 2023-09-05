@@ -10,18 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import com.netease.yunxin.kit.alog.ALog;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.dialog.ChatRoomMoreDialog;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.SeatEvent;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.VoiceRoomSeat;
-import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.RoomViewModel;
+import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.ListenTogetherRoomViewModel;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
 import java.util.Arrays;
 import java.util.List;
 
 /** 观众页 */
 public class ListenTogetherAudienceActivity extends ListenTogetherBaseActivity {
-  private List<ChatRoomMoreDialog.MoreItem> moreItems;
 
   @Override
   protected int getContentViewID() {
@@ -77,7 +76,8 @@ public class ListenTogetherAudienceActivity extends ListenTogetherBaseActivity {
               @Override
               public void onChanged(Integer integer) {
                 ALog.d(TAG, "initDataObserver currentSeatState,integer:" + integer);
-                updateAudioSwitchVisible(integer == RoomViewModel.CURRENT_SEAT_STATE_ON_SEAT);
+                updateAudioSwitchVisible(
+                    integer == ListenTogetherRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT);
                 if (roomViewModel.isCurrentUserOnSeat()) {
                   //                  NEVoiceRoomKit.getInstance().unmuteMyAudio(null);
                   unmuteMyAudio(null);
@@ -92,7 +92,7 @@ public class ListenTogetherAudienceActivity extends ListenTogetherBaseActivity {
         .observe(
             this,
             state -> {
-              if (state == RoomViewModel.NET_AVAILABLE) { // 网可用
+              if (state == ListenTogetherRoomViewModel.NET_AVAILABLE) { // 网可用
                 onNetAvailable();
               } else { // 不可用
                 onNetLost();
@@ -118,12 +118,10 @@ public class ListenTogetherAudienceActivity extends ListenTogetherBaseActivity {
   @Override
   protected List<ChatRoomMoreDialog.MoreItem> getMoreItems() {
     boolean isAudioOn =
-        NEListenTogetherKit.getInstance().getLocalMember() != null
-            && NEListenTogetherKit.getInstance().getLocalMember().isAudioOn();
+        NEVoiceRoomKit.getInstance().getLocalMember() != null
+            && NEVoiceRoomKit.getInstance().getLocalMember().isAudioOn();
     moreItems.get(MORE_ITEM_MICRO_PHONE).setEnable(isAudioOn);
-    moreItems
-        .get(MORE_ITEM_EAR_BACK)
-        .setEnable(NEListenTogetherKit.getInstance().isEarbackEnable());
+    moreItems.get(MORE_ITEM_EAR_BACK).setEnable(NEVoiceRoomKit.getInstance().isEarbackEnable());
     return moreItems;
   }
 

@@ -28,9 +28,8 @@
     <string name="app_pstn_setting_title">PSTN Connectivity Settings</string>
     <string name="app_high_keep_alive_feature">PSTN Connectivity</string>
     <string name="app_high_keep_alive_title_level1">PSTN Connectivity: </string>
-    <string name="app_high_keep_alive_content1">PSTN service provides three methods to promote connectivity.\nUse PSTN solely or in combination with other services.</string>
     <string name="app_high_keep_alive_title_level2">Level 2</string>
-    <string name="app_high_keep_alive_content2">1. Keep app running in the background: \nIf Keep app running in the background is enabled, a notification will be shown on the notification bar for testing purposes.\nThe feature allows the app to run in the background for a long time (depending on different brands) \n\n\n2. Audio call: \nSIP calls are automatically switched to audio calls if failed.\nIf you start an audio call by clicking Auido Call and fails to get connected after 15 seconds, you are switched to SIP calling. The trigger condition can be customized.\n\n\n3. SMS notification:\nThe feature can notify the called parity of call requests. Users can open the app can handle the requests.\nIf an audio or video call is connecting for 30 seconds and fails, an SMS notification will be delivered.</string>
+    <string name="app_high_keep_alive_content2">1. Keep app running in the background: \nIf Keep app running in the background is enabled, a notification will be shown on the notification bar for testing purposes.\nThe feature allows the app to run in the background for a long time (depending on different brands) \n\n\n</string>
     <string name="app_high_keep_alive_content3">The following articles also restrict and applies to the user of this website and is referenced herewith:</string>
     <string name="app_tips">Tips</string>
     <string name="app_dialog_protocol_tips_title">Terms of Service and Privacy Policy</string>
@@ -50,20 +49,30 @@
     <string name="has_open">Enabled</string>
     <string name="has_close">Disabled</string>
     <string name="float_permission_desc">By granting the floating window permission, you can also receive notifications for voice or video calls even when the app is running in the background or the screen is locked. \nTo ensure timely notification of incoming voice or video calls, please allow the following permissions: \n1. Allow background activity; 2. Show on lock screen; 3. Allow pop-up windows in the background.</string>
-    <string name="host">房主</string>
-    <string name="send_to">送给</string>
-    <string name="gift_send">赠送</string>
-    <string name="gift_send_memeber_empty">未选择送礼对象，无法送礼</string>
-    <string name="gift">礼物</string>
-    <string name="send_gift">送礼物</string>
-    <string name="glow_stick">荧光棒</string>
-    <string name="arrange">安排</string>
-    <string name="sports_car">跑车</string>
-    <string name="rockets">火箭</string>
-    <string name="send">发送</string>
-    <string name="send2">送给</string>
+    <string name="host">host</string>
+    <string name="send_to">send to</string>
+    <string name="gift_send">send</string>
+    <string name="gift_send_memeber_empty">No gift object selected, unable to send gifts</string>
+    <string name="gift">Gift</string>
+    <string name="send_gift">Send gift</string>
+    <string name="glow_stick">Glow stick</string>
+    <string name="arrange">Arrange</string>
+    <string name="sports_car">Sports car</string>
+    <string name="rockets">Rockets</string>
+    <string name="send">Send</string>
+    <string name="send2">Send</string>
     <string name="coin">coins</string>
-    <string name="reward_failed">打赏礼物失败</string>
-    <string name="donate">赠送了</string>
-    <string name="count">个</string>
+    <string name="reward_failed">Reward failed</string>
+    <string name="donate">donate</string>
+    <string name="count">count</string>
+    <string name="srl_content_empty">The content view in SmartRefreshLayout is empty. Do you forget to add it in xml layout file?</string>
+    <string name="srl_component_falsify" formatted="false">%s falsify area,\n Represents the height[%.1fdp] of drag at run time,\n It does not show anything.</string>
+    <string name="one_one_one_report_success">Reported successfully</string>
+
+    <string-array name="report_content">
+        <item>Political bias</item>
+        <item>Pornographic vulgarity</item>
+        <item>Ad and marketing</item>
+        <item>Fraudulent information</item>
+    </string-array>
 </resources>

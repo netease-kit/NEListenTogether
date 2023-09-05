@@ -7,20 +7,17 @@ package com.netease.yunxin.kit.listentogetherkit.ui.activity;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.dialog.ChatRoomMoreDialog;
 import com.netease.yunxin.kit.listentogetherkit.ui.dialog.ChoiceDialog;
 import com.netease.yunxin.kit.listentogetherkit.ui.dialog.TopTipsDialog;
-import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.RoomViewModel;
+import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.ListenTogetherRoomViewModel;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
 import java.util.Arrays;
 import java.util.List;
 
 /** 主播页 */
 public class ListenTogetherAnchorActivity extends ListenTogetherBaseActivity {
-
-  private List<ChatRoomMoreDialog.MoreItem> moreItems;
-
   @Override
   protected int getContentViewID() {
     return R.layout.listen_activity_live;
@@ -31,6 +28,7 @@ public class ListenTogetherAnchorActivity extends ListenTogetherBaseActivity {
     super.onCreate(savedInstanceState);
     netErrorView = findViewById(R.id.view_net_error);
     createMoreItems();
+    audioPlay.checkMusicFiles();
     watchNetWork();
   }
 
@@ -65,7 +63,7 @@ public class ListenTogetherAnchorActivity extends ListenTogetherBaseActivity {
         .observe(
             this,
             state -> {
-              if (state == RoomViewModel.NET_AVAILABLE) { // 网可用
+              if (state == ListenTogetherRoomViewModel.NET_AVAILABLE) { // 网可用
                 onNetAvailable();
               } else { // 不可用
                 onNetLost();
@@ -104,11 +102,9 @@ public class ListenTogetherAnchorActivity extends ListenTogetherBaseActivity {
     moreItems
         .get(MORE_ITEM_MICRO_PHONE)
         .setEnable(
-            NEListenTogetherKit.getInstance().getLocalMember() != null
-                && NEListenTogetherKit.getInstance().getLocalMember().isAudioOn());
-    moreItems
-        .get(MORE_ITEM_EAR_BACK)
-        .setEnable(NEListenTogetherKit.getInstance().isEarbackEnable());
+            NEVoiceRoomKit.getInstance().getLocalMember() != null
+                && NEVoiceRoomKit.getInstance().getLocalMember().isAudioOn());
+    moreItems.get(MORE_ITEM_EAR_BACK).setEnable(NEVoiceRoomKit.getInstance().isEarbackEnable());
     return moreItems;
   }
 }

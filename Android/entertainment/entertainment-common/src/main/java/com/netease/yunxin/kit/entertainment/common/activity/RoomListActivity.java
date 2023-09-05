@@ -11,16 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.gyf.immersionbar.ImmersionBar;
 import com.netease.yunxin.kit.common.utils.SizeUtils;
 import com.netease.yunxin.kit.entertainment.common.RoomConstants;
 import com.netease.yunxin.kit.entertainment.common.adapter.RoomListAdapter;
 import com.netease.yunxin.kit.entertainment.common.databinding.ActivityRoomListBinding;
+import com.netease.yunxin.kit.entertainment.common.smartrefresh.api.RefreshLayout;
+import com.netease.yunxin.kit.entertainment.common.smartrefresh.listener.OnLoadMoreListener;
+import com.netease.yunxin.kit.entertainment.common.smartrefresh.listener.OnRefreshListener;
 import com.netease.yunxin.kit.entertainment.common.widget.FooterView;
 import com.netease.yunxin.kit.entertainment.common.widget.HeaderView;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 public abstract class RoomListActivity extends BaseActivity
     implements OnRefreshListener, OnLoadMoreListener {
@@ -33,7 +32,7 @@ public abstract class RoomListActivity extends BaseActivity
   protected int tempPageNum = 1;
   protected RoomListAdapter adapter;
   private GridLayoutManager layoutManager;
-
+  protected boolean isOversea = false;
   protected int configId;
 
   protected String userName;
@@ -45,9 +44,8 @@ public abstract class RoomListActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     binding = ActivityRoomListBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
-    ImmersionBar bar = ImmersionBar.with(this).statusBarDarkFont(true);
-    bar.init();
     paddingStatusBarHeight(binding.getRoot());
+    isOversea = getIntent().getBooleanExtra(RoomConstants.INTENT_IS_OVERSEA, false);
     configId = getIntent().getIntExtra(RoomConstants.INTENT_KEY_CONFIG_ID, 0);
     userName = getIntent().getStringExtra(RoomConstants.INTENT_USER_NAME);
     avatar = getIntent().getStringExtra(RoomConstants.INTENT_AVATAR);

@@ -13,12 +13,13 @@ import android.util.Pair;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.blankj.utilcode.util.Utils;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.network.NetRequestCallback;
+import com.netease.yunxin.kit.common.utils.NetworkUtils;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.SongResType;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.chatroom.ChatRoomMsgCreator;
 import com.netease.yunxin.kit.listentogetherkit.ui.core.ListenTogetherService;
@@ -244,25 +245,24 @@ public class ListenTogetherViewModel extends ViewModel {
         }
       };
 
-  private final com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener
-      onNetworkStatusChangedListener =
-          new com.blankj.utilcode.util.NetworkUtils.OnNetworkStatusChangedListener() {
-            @Override
-            public void onDisconnected() {
-              ALog.i(TAG, "onNetworkUnavailable");
-            }
+  private final NetworkUtils.NetworkStateListener onNetworkStatusChangedListener =
+      new NetworkUtils.NetworkStateListener() {
 
-            @Override
-            public void onConnected(com.blankj.utilcode.util.NetworkUtils.NetworkType networkType) {
-              ALog.i(TAG, "onNetworkAvailable");
-              queryCurrentPlayingSong();
-            }
-          };
+        @Override
+        public void onConnected(NetworkUtils.NetworkType networkType) {
+          ALog.i(TAG, "onNetworkAvailable");
+          queryCurrentPlayingSong();
+        }
+
+        @Override
+        public void onDisconnected() {
+          ALog.i(TAG, "onNetworkUnavailable");
+        }
+      };
 
   public void initialize(ListenTogetherRoomModel roomModel) {
     this.roomModel = roomModel;
-    com.blankj.utilcode.util.NetworkUtils.registerNetworkStatusChangedListener(
-        onNetworkStatusChangedListener);
+    NetworkUtils.registerNetworkStatusChangedListener(onNetworkStatusChangedListener);
     NEOrderSongService.INSTANCE.addListener(orderSongListener);
     listenTogetherService.addListener(listenTogetherListener);
     queryCurrentPlayingSong();
@@ -363,7 +363,7 @@ public class ListenTogetherViewModel extends ViewModel {
               return;
             }
             if (copyrightedMedia.isSongPreloaded(info.songId, info.channel)) {
-              if (info.songStatus == ListenTogetherConstant.SONG_READY_STATE) {
+              if (info.musicStatus == ListenTogetherConstant.SONG_READY_STATE) {
                 ALog.i(TAG, "songStatus ready");
                 reportReady(info.orderId);
               } else {
@@ -390,7 +390,7 @@ public class ListenTogetherViewModel extends ViewModel {
                     @Override
                     public void onPreloadComplete(
                         String songId, int channel, int errorCode, String msg) {
-                      if (info.songStatus == ListenTogetherConstant.SONG_READY_STATE) {
+                      if (info.musicStatus == ListenTogetherConstant.SONG_READY_STATE) {
                         ALog.i(TAG, "songStatus ready");
                         reportReady(info.orderId);
                       } else {
@@ -430,8 +430,7 @@ public class ListenTogetherViewModel extends ViewModel {
   @Override
   protected void onCleared() {
     super.onCleared();
-    com.blankj.utilcode.util.NetworkUtils.unregisterNetworkStatusChangedListener(
-        onNetworkStatusChangedListener);
+    NetworkUtils.unregisterNetworkStatusChangedListener(onNetworkStatusChangedListener);
     NEOrderSongService.INSTANCE.removeListener(orderSongListener);
     listenTogetherService.removeListener(listenTogetherListener);
   }
@@ -452,8 +451,8 @@ public class ListenTogetherViewModel extends ViewModel {
             for (NEOrderSong songModel : info) {
               NECopyrightedMedia.getInstance()
                   .preloadSong(
-                      songModel.getSongId(),
-                      songModel.getChannel(),
+                      songModel.getOrderSong().getSongId(),
+                      songModel.getOrderSong().getChannel(),
                       new NESongPreloadCallback() {
                         @Override
                         public void onPreloadStart(String songId, int channel) {}

@@ -32,7 +32,7 @@ dependencyResolutionManagement {
 }
 
 include(":app")
-include(":listentogether:listentogetherkit")
+include(":voiceroomkit:voiceroomkit")
 include(":listentogether:listentogetherkit-ui")
 include(":entertainment:entertainment-common")
 include(":ordersong:ordersong")
