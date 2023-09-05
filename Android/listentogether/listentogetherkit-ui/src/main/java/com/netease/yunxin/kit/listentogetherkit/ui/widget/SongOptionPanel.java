@@ -29,8 +29,6 @@ import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.SongResType;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherRoomListenerAdapter;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.activity.ListenTogetherBaseActivity;
 import com.netease.yunxin.kit.listentogetherkit.ui.core.ListenTogetherService;
@@ -47,6 +45,8 @@ import com.netease.yunxin.kit.ordersong.core.model.Song;
 import com.netease.yunxin.kit.ordersong.core.util.GsonUtils;
 import com.netease.yunxin.kit.ordersong.ui.NEOrderSongCallback;
 import com.netease.yunxin.kit.ordersong.ui.viewmodel.OrderSongViewModel;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomListenerAdapter;
 
 /** 一起听歌曲操作面板 */
 public class SongOptionPanel extends ConstraintLayout {
@@ -127,8 +127,8 @@ public class SongOptionPanel extends ConstraintLayout {
         @Override
         public void onSongOtherDownloadStateChanged(Song song, boolean isDownloading) {}
       };
-  private NEListenTogetherRoomListenerAdapter roomListener =
-      new NEListenTogetherRoomListenerAdapter() {
+  private NEVoiceRoomListenerAdapter roomListener =
+      new NEVoiceRoomListenerAdapter() {
         @Override
         public void onAudioEffectTimestampUpdate(@NonNull long effectId, long timeStampMS) {
           if (currentSong == null || effectId != ListenTogetherConstant.EFFECT_ID) {
@@ -195,16 +195,17 @@ public class SongOptionPanel extends ConstraintLayout {
             neOrderSong -> {
               if (neOrderSong != null) {
                 ALog.i(TAG, "order song dialog ordered list switch song");
-                if (currentSong != null && currentSong.getOrderId() == neOrderSong.getOrderId()) {
+                if (currentSong != null
+                    && currentSong.getOrderId() == neOrderSong.getOrderSong().getOrderId()) {
                   ALog.i(TAG, "the same song");
                   return;
                 }
                 Song nextSong = new Song();
-                nextSong.setOrderId(neOrderSong.getOrderId());
-                nextSong.setSongId(neOrderSong.getSongId());
-                nextSong.setSongName(neOrderSong.getSongName());
-                nextSong.setSinger(neOrderSong.getSinger());
-                nextSong.setSongTime(neOrderSong.getSongTime());
+                nextSong.setOrderId(neOrderSong.getOrderSong().getOrderId());
+                nextSong.setSongId(neOrderSong.getOrderSong().getSongId());
+                nextSong.setSongName(neOrderSong.getOrderSong().getSongName());
+                nextSong.setSinger(neOrderSong.getOrderSong().getSinger());
+                nextSong.setSongTime(neOrderSong.getOrderSong().getSongTime());
                 switchSong(nextSong);
               } else {
                 ALog.i(TAG, "order song dialog button switch song");
@@ -360,8 +361,7 @@ public class SongOptionPanel extends ConstraintLayout {
   public void seekTo(long position, long songTime) {
     currentPlayPosition = position;
     binding.tvSongProgress.setText(DateFormatUtils.long2StrHS(position));
-    NEListenTogetherKit.getInstance()
-        .setPlayingPosition(ListenTogetherConstant.EFFECT_ID, position);
+    NEVoiceRoomKit.getInstance().setPlayingPosition(ListenTogetherConstant.EFFECT_ID, position);
     int progress = (int) ((currentPlayPosition * 1.0 / songTime * 1.0) * 100.0);
     ALog.i(TAG, "seekTo position:" + position + ",songTime:" + songTime + ",progress:" + progress);
     binding.seekbar.setProgress(progress);
@@ -458,7 +458,7 @@ public class SongOptionPanel extends ConstraintLayout {
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    NEListenTogetherKit.getInstance().removeRoomListener(roomListener);
+    NEVoiceRoomKit.getInstance().removeVoiceRoomListener(roomListener);
     listenTogetherService.removeListener(listenTogetherListener);
     NEOrderSongService.INSTANCE.removeListener(neOrderSongListener);
   }
@@ -472,7 +472,7 @@ public class SongOptionPanel extends ConstraintLayout {
   public void setRoomInfo(ListenTogetherRoomModel voiceRoomInfo) {
     listenTogetherService.setRoomInfo(voiceRoomInfo);
     listenTogetherService.addListener(listenTogetherListener);
-    NEListenTogetherKit.getInstance().addRoomListener(roomListener);
+    NEVoiceRoomKit.getInstance().addVoiceRoomListener(roomListener);
     NEOrderSongService.INSTANCE.addListener(neOrderSongListener);
   }
 

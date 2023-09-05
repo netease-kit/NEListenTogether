@@ -18,9 +18,8 @@ import com.netease.yunxin.kit.entertainment.common.dialog.BottomBaseDialog;
 import com.netease.yunxin.kit.entertainment.common.gift.GiftCache;
 import com.netease.yunxin.kit.entertainment.common.gift.GiftInfo;
 import com.netease.yunxin.kit.entertainment.common.utils.Utils;
-import com.netease.yunxin.kit.listentogetherkit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
-
+import com.netease.yunxin.kit.voiceroomkit.impl.utils.ScreenUtil;
 import java.util.*;
 
 public class GiftDialog extends BottomBaseDialog {

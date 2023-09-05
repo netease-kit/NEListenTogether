@@ -8,13 +8,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import com.netease.yunxin.app.listentogether.utils.LoginUtil;
 import com.netease.yunxin.kit.alog.ALog;
+import com.netease.yunxin.kit.common.ui.utils.ToastX;
 import com.netease.yunxin.kit.entertainment.common.AppStatusConstant;
 import com.netease.yunxin.kit.entertainment.common.AppStatusManager;
 import com.netease.yunxin.kit.entertainment.common.Constants;
 import com.netease.yunxin.kit.entertainment.common.R;
 import com.netease.yunxin.kit.entertainment.common.activity.BaseActivity;
-import com.netease.yunxin.kit.entertainment.common.statusbar.StatusBarConfig;
+import com.netease.yunxin.kit.entertainment.common.model.NemoAccount;
+import com.netease.yunxin.kit.entertainment.common.utils.UserInfoManager;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
@@ -32,11 +35,35 @@ public class SplashActivity extends BaseActivity {
         finish();
       }
     }
-    init();
+    if (UserInfoManager.getUserInfoFromSp() != null) {
+      // sp中有登录信息，执行登录逻辑，成功后跳转到首页
+      loginVoiceRoom(UserInfoManager.getUserInfoFromSp());
+    } else {
+      // 跳转到登录页面
+      gotoLoginPage();
+    }
   }
 
-  protected void init() {
-    gotoHomePage();
+  private void loginVoiceRoom(NemoAccount nemoAccount) {
+    LoginUtil.loginVoiceRoom(
+        this,
+        nemoAccount,
+        new LoginUtil.LoginVoiceRoomCallback() {
+          @Override
+          public void onSuccess() {
+            gotoHomePage();
+          }
+
+          @Override
+          public void onError(int errorCode, String errorMsg) {
+            ToastX.showShortToast(errorMsg);
+          }
+        });
+  }
+
+  private void gotoLoginPage() {
+    SampleLoginActivity.startLoginActivity(this);
+    finish();
   }
 
   @Override
@@ -44,11 +71,6 @@ public class SplashActivity extends BaseActivity {
     super.onNewIntent(intent);
     ALog.d(TAG, "onNewIntent: intent -> " + intent.getData());
     setIntent(intent);
-  }
-
-  @Override
-  protected StatusBarConfig provideStatusBarConfig() {
-    return new StatusBarConfig.Builder().statusBarDarkFont(true).fullScreen(true).build();
   }
 
   private void gotoHomePage() {

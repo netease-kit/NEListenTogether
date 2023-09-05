@@ -16,16 +16,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.helper.AudioPlayHelper;
-import java.util.List;
 
 /** Created by luc on 1/28/21. */
 public class ChatRoomAudioDialog extends BottomBaseDialog {
   private final AudioPlayHelper audioPlay;
 
-  public ChatRoomAudioDialog(
-      @NonNull Activity activity,
-      AudioPlayHelper audioPlayHelper,
-      List<MusicItem> audioMixingMusicInfos) {
+  public ChatRoomAudioDialog(@NonNull Activity activity, AudioPlayHelper audioPlayHelper) {
     super(activity);
     this.audioPlay = audioPlayHelper;
   }

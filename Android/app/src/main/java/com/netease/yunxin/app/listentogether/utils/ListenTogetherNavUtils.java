@@ -7,10 +7,10 @@ package com.netease.yunxin.app.listentogether.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import com.blankj.utilcode.util.NetworkUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.netease.yunxin.app.listentogether.activity.CommonSettingActivity;
 import com.netease.yunxin.app.listentogether.config.AppConfig;
+import com.netease.yunxin.kit.common.ui.utils.ToastX;
+import com.netease.yunxin.kit.common.utils.NetworkUtils;
 import com.netease.yunxin.kit.entertainment.common.Constants;
 import com.netease.yunxin.kit.entertainment.common.R;
 import com.netease.yunxin.kit.entertainment.common.RoomConstants;
@@ -51,13 +51,13 @@ public class ListenTogetherNavUtils {
 
   public static void toListenTogetherRoomListPage(Context context) {
     if (!NetworkUtils.isConnected()) {
-      ToastUtils.showShort(context.getString(R.string.app_network_error));
+      ToastX.showShortToast(context.getString(R.string.app_network_error));
       return;
     }
     Intent intent = new Intent(context, ListenTogetherRoomListActivity.class);
+    intent.putExtra(RoomConstants.INTENT_KEY_CONFIG_ID, AppConfig.getListenTogetherConfigId());
     intent.putExtra(RoomConstants.INTENT_USER_NAME, AppUtils.getUserName());
     intent.putExtra(RoomConstants.INTENT_AVATAR, AppUtils.getAvatar());
-    intent.putExtra(RoomConstants.INTENT_KEY_CONFIG_ID, AppConfig.getListenTogetherConfigId());
     context.startActivity(intent);
   }
 }

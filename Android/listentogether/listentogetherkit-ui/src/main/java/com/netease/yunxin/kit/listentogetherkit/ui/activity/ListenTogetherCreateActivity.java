@@ -15,18 +15,16 @@ import com.netease.yunxin.kit.entertainment.common.activity.CreateRoomActivity;
 import com.netease.yunxin.kit.entertainment.common.utils.ClickUtils;
 import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.entertainment.common.utils.VoiceRoomUtils;
-import com.netease.yunxin.kit.listentogetherkit.api.NECreateListenTogetherRoomOptions;
-import com.netease.yunxin.kit.listentogetherkit.api.NECreateListenTogetherRoomParams;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherCallback;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.NELiveType;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherCreateRoomDefaultInfo;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomInfo;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.NavUtils;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.VoiceRoomUtil;
+import com.netease.yunxin.kit.voiceroomkit.api.NECreateVoiceRoomOptions;
+import com.netease.yunxin.kit.voiceroomkit.api.NECreateVoiceRoomParams;
+import com.netease.yunxin.kit.voiceroomkit.api.NELiveType;
 import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomCallback;
 import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceCreateRoomDefaultInfo;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomInfo;
 import kotlin.Unit;
 
 public class ListenTogetherCreateActivity extends CreateRoomActivity {
@@ -41,15 +39,17 @@ public class ListenTogetherCreateActivity extends CreateRoomActivity {
   @Override
   protected void getRoomDefault() {
     super.getRoomDefault();
-    NEListenTogetherKit.getInstance()
+    NEVoiceRoomKit.getInstance()
         .getCreateRoomDefaultInfo(
-            new NEListenTogetherCallback<NEListenTogetherCreateRoomDefaultInfo>() {
+            new NEVoiceRoomCallback<NEVoiceCreateRoomDefaultInfo>() {
 
               @Override
               public void onSuccess(
-                  @Nullable NEListenTogetherCreateRoomDefaultInfo neVoiceCreateRoomDefaultInfo) {
-                binding.etRoomName.setText(neVoiceCreateRoomDefaultInfo.getTopic());
-                cover = neVoiceCreateRoomDefaultInfo.getLivePicture();
+                  @Nullable NEVoiceCreateRoomDefaultInfo neVoiceCreateRoomDefaultInfo) {
+                if (neVoiceCreateRoomDefaultInfo != null) {
+                  binding.etRoomName.setText(neVoiceCreateRoomDefaultInfo.getTopic());
+                  cover = neVoiceCreateRoomDefaultInfo.getLivePicture();
+                }
               }
 
               @Override
@@ -132,8 +132,8 @@ public class ListenTogetherCreateActivity extends CreateRoomActivity {
 
   protected void createRoomInner() {
 
-    NECreateListenTogetherRoomParams createVoiceRoomParams =
-        new NECreateListenTogetherRoomParams(
+    NECreateVoiceRoomParams createVoiceRoomParams =
+        new NECreateVoiceRoomParams(
             binding.etRoomName.getText().toString(),
             username,
             LISTEN_TOGETHER_COUNT_SEAT,
@@ -141,13 +141,13 @@ public class ListenTogetherCreateActivity extends CreateRoomActivity {
             cover,
             NELiveType.LIVE_TYPE_TOGETHER_LISTEN,
             null);
-    NEListenTogetherKit.getInstance()
+    NEVoiceRoomKit.getInstance()
         .createRoom(
             createVoiceRoomParams,
-            new NECreateListenTogetherRoomOptions(),
-            new NEListenTogetherCallback<NEListenTogetherRoomInfo>() {
+            new NECreateVoiceRoomOptions(),
+            new NEVoiceRoomCallback<NEVoiceRoomInfo>() {
               @Override
-              public void onSuccess(@Nullable NEListenTogetherRoomInfo roomInfo) {
+              public void onSuccess(@Nullable NEVoiceRoomInfo roomInfo) {
                 NavUtils.toListenTogetherRoomPage(
                     ListenTogetherCreateActivity.this, username, avatar, roomInfo);
                 finish();

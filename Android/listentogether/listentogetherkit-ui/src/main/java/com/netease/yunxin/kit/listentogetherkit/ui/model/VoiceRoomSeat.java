@@ -9,8 +9,8 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomMember;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.SeatUtils;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomMember;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +56,7 @@ public class VoiceRoomSeat implements Serializable, Parcelable {
   private final int index;
   private final int status;
   private final int reason;
-  private final NEListenTogetherRoomMember member;
+  private final NEVoiceRoomMember member;
 
   private boolean isSpeaking;
 
@@ -64,7 +64,7 @@ public class VoiceRoomSeat implements Serializable, Parcelable {
     this(index, Status.INIT, Reason.NONE, null);
   }
 
-  public VoiceRoomSeat(int index, int status, int reason, NEListenTogetherRoomMember member) {
+  public VoiceRoomSeat(int index, int status, int reason, NEVoiceRoomMember member) {
     this.index = index;
     this.status = status;
     this.reason = reason;
@@ -84,7 +84,7 @@ public class VoiceRoomSeat implements Serializable, Parcelable {
   }
 
   @Nullable
-  public NEListenTogetherRoomMember getMember() {
+  public NEVoiceRoomMember getMember() {
     return member;
   }
 

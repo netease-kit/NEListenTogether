@@ -17,16 +17,17 @@ import com.netease.yunxin.kit.entertainment.common.adapter.RoomListAdapter;
 import com.netease.yunxin.kit.entertainment.common.model.RoomModel;
 import com.netease.yunxin.kit.entertainment.common.utils.ClickUtils;
 import com.netease.yunxin.kit.entertainment.common.utils.ReportUtils;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherCallback;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherLiveState;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomInfo;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NERoomList;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.adapter.ListenTogetherListAdapter;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.ListenTogetherUtils;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.NavUtils;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.VoiceRoomUtil;
+import com.netease.yunxin.kit.voiceroomkit.api.NELiveType;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomCallback;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomLiveState;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomInfo;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomList;
 import kotlin.Unit;
 
 public class ListenTogetherRoomListActivity extends RoomListActivity {
@@ -51,7 +52,6 @@ public class ListenTogetherRoomListActivity extends RoomListActivity {
               TAG_REPORT_PAGE_LISTEN_TOTHER,
               "listentogether_start_live");
           Intent intent = new Intent(this, ListenTogetherCreateActivity.class);
-          intent.putExtra(RoomConstants.INTENT_KEY_CONFIG_ID, configId);
           intent.putExtra(RoomConstants.INTENT_USER_NAME, userName);
           intent.putExtra(RoomConstants.INTENT_AVATAR, avatar);
           startActivity(intent);
@@ -80,14 +80,15 @@ public class ListenTogetherRoomListActivity extends RoomListActivity {
   @Override
   protected void refresh() {
     super.refresh();
-    NEListenTogetherKit.getInstance()
+    NEVoiceRoomKit.getInstance()
         .getRoomList(
-            NEListenTogetherLiveState.Live,
+            NEVoiceRoomLiveState.Live,
+            NELiveType.LIVE_TYPE_TOGETHER_LISTEN,
             tempPageNum,
             PAGE_SIZE,
-            new NEListenTogetherCallback<NERoomList>() {
+            new NEVoiceRoomCallback<NEVoiceRoomList>() {
               @Override
-              public void onSuccess(@Nullable NERoomList neVoiceRoomList) {
+              public void onSuccess(@Nullable NEVoiceRoomList neVoiceRoomList) {
                 pageNum = tempPageNum;
                 if (neVoiceRoomList == null
                     || neVoiceRoomList.getList() == null
@@ -117,14 +118,15 @@ public class ListenTogetherRoomListActivity extends RoomListActivity {
   @Override
   protected void loadMore() {
     super.loadMore();
-    NEListenTogetherKit.getInstance()
+    NEVoiceRoomKit.getInstance()
         .getRoomList(
-            NEListenTogetherLiveState.Live,
+            NEVoiceRoomLiveState.Live,
+            NELiveType.LIVE_TYPE_TOGETHER_LISTEN,
             tempPageNum,
             PAGE_SIZE,
-            new NEListenTogetherCallback<NERoomList>() {
+            new NEVoiceRoomCallback<NEVoiceRoomList>() {
               @Override
-              public void onSuccess(@Nullable NERoomList neVoiceRoomList) {
+              public void onSuccess(@Nullable NEVoiceRoomList neVoiceRoomList) {
                 pageNum = tempPageNum;
                 if (neVoiceRoomList != null && neVoiceRoomList.getList() != null) {
                   adapter.loadMore(
@@ -151,9 +153,9 @@ public class ListenTogetherRoomListActivity extends RoomListActivity {
       builder.setPositiveButton(
           getString(R.string.voiceroom_sure),
           (dialog, which) -> {
-            NEListenTogetherKit.getInstance()
+            NEVoiceRoomKit.getInstance()
                 .leaveRoom(
-                    new NEListenTogetherCallback<Unit>() {
+                    new NEVoiceRoomCallback<Unit>() {
                       @Override
                       public void onSuccess(@Nullable Unit unit) {
                         joinListenTogetherRoom(info);
@@ -174,12 +176,12 @@ public class ListenTogetherRoomListActivity extends RoomListActivity {
   }
 
   private void joinListenTogetherRoom(RoomModel info) {
-    NEListenTogetherKit.getInstance()
+    NEVoiceRoomKit.getInstance()
         .getRoomInfo(
             info.getLiveRecordId(),
-            new NEListenTogetherCallback<NEListenTogetherRoomInfo>() {
+            new NEVoiceRoomCallback<NEVoiceRoomInfo>() {
               @Override
-              public void onSuccess(@Nullable NEListenTogetherRoomInfo neVoiceRoomInfo) {
+              public void onSuccess(@Nullable NEVoiceRoomInfo neVoiceRoomInfo) {
                 if (neVoiceRoomInfo.getLiveModel() != null
                     && neVoiceRoomInfo.getLiveModel().getAudienceCount()
                         >= ROOM_MAX_AUDIENCE_COUNT) {

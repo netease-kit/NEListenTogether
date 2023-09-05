@@ -20,21 +20,19 @@ dependencies {
     // jetpack dependencies
     implementation("com.google.android.material:material:1.5.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
-    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     // third party dependencies
     implementation("com.airbnb.android:lottie:5.0.3")
-    implementation("com.gyf.immersionbar:immersionbar:3.0.0")
 
     // xkit dependencies
-    implementation("com.blankj:utilcodex:1.30.6")
-    implementation("com.netease.yunxin.kit.common:common-ui:1.1.20")
+    implementation("com.netease.yunxin.kit.common:common-ui:1.3.1")
     implementation("com.netease.yunxin.kit.common:common-network:1.1.8")
     implementation("com.netease.yunxin.kit.common:common-image:1.1.7")
-    implementation("com.netease.yunxin.kit.copyrightedmedia:copyrightedmedia:1.6.0")
-    implementation("com.netease.yunxin.kit.room:roomkit:1.14.0")
-    implementation("com.netease.yunxin.kit:alog:1.0.9")
+    implementation("com.netease.yunxin.kit.copyrightedmedia:copyrightedmedia:1.7.0")
+    implementation("com.netease.yunxin.kit.room:roomkit:1.20.0")
+    implementation("com.netease.yunxin.kit:alog:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.google.code.gson:gson:2.9.0")
 }

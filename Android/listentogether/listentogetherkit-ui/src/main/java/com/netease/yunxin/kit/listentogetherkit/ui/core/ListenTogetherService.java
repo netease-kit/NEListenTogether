@@ -7,8 +7,6 @@ package com.netease.yunxin.kit.listentogetherkit.ui.core;
 import androidx.annotation.NonNull;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.network.NetRequestCallback;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.NEVoiceRoomRole;
 import com.netease.yunxin.kit.listentogetherkit.ui.core.constant.ListenTogetherCmd;
 import com.netease.yunxin.kit.listentogetherkit.ui.core.constant.ListenTogetherConstant;
 import com.netease.yunxin.kit.listentogetherkit.ui.core.model.NERoomListenerEx;
@@ -23,6 +21,8 @@ import com.netease.yunxin.kit.roomkit.api.NERoomKit;
 import com.netease.yunxin.kit.roomkit.api.service.NECustomMessage;
 import com.netease.yunxin.kit.roomkit.api.service.NEMessageChannelListener;
 import com.netease.yunxin.kit.roomkit.api.service.NEMessageChannelService;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomRole;
 import java.util.ArrayList;
 import java.util.List;
 import kotlin.Unit;
@@ -196,14 +196,14 @@ public class ListenTogetherService {
   }
 
   private String getOtherUserUuid() {
-    if (NEListenTogetherKit.getInstance().getAllMemberList().size() == 2) {
-      return NEListenTogetherKit.getInstance().getAllMemberList().get(1).getAccount();
+    if (NEVoiceRoomKit.getInstance().getAllMemberList().size() == 2) {
+      return NEVoiceRoomKit.getInstance().getAllMemberList().get(1).getAccount();
     }
     return "";
   }
 
   public void notifyOtherSeekTo(long position) {
-    if (NEListenTogetherKit.getInstance().getAllMemberList().size() == 2) {
+    if (NEVoiceRoomKit.getInstance().getAllMemberList().size() == 2) {
       JSONObject jsonObject = new JSONObject();
       try {
         Song song = getCurrentPlayingSong();
@@ -232,7 +232,7 @@ public class ListenTogetherService {
   public void queryCurrentSongPlayPosition() {
     JSONObject jsonObject = new JSONObject();
     try {
-      jsonObject.put("userUuid", NEListenTogetherKit.getInstance().getLocalMember().getAccount());
+      jsonObject.put("userUuid", NEVoiceRoomKit.getInstance().getLocalMember().getAccount());
     } catch (JSONException e) {
       e.printStackTrace();
       ALog.e(TAG, "queryCurrentSongPlayPosition JSONException e:" + e);
@@ -250,15 +250,15 @@ public class ListenTogetherService {
 
   private String getAnotherUserUuid() {
     if (ListenTogetherUtils.isCurrentHost()
-        && NEListenTogetherKit.getInstance().getAllMemberList().size() == TWO_COUNT) {
-      return NEListenTogetherKit.getInstance().getAllMemberList().get(1).getAccount();
+        && NEVoiceRoomKit.getInstance().getAllMemberList().size() == TWO_COUNT) {
+      return NEVoiceRoomKit.getInstance().getAllMemberList().get(1).getAccount();
     }
     return anchorUserUuid;
   }
 
   public boolean isAnchor() {
-    return NEListenTogetherKit.getInstance().getLocalMember() != null
-        && NEListenTogetherKit.getInstance()
+    return NEVoiceRoomKit.getInstance().getLocalMember() != null
+        && NEVoiceRoomKit.getInstance()
             .getLocalMember()
             .getRole()
             .equals(NEVoiceRoomRole.HOST.getValue());

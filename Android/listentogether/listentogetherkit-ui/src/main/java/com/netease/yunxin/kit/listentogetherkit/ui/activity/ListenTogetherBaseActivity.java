@@ -30,9 +30,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
-import com.blankj.utilcode.util.PermissionUtils;
-import com.gyf.immersionbar.ImmersionBar;
 import com.netease.yunxin.kit.alog.ALog;
+import com.netease.yunxin.kit.common.ui.utils.Permission;
 import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
 import com.netease.yunxin.kit.common.utils.DeviceUtils;
 import com.netease.yunxin.kit.common.utils.NetworkUtils;
@@ -47,18 +46,7 @@ import com.netease.yunxin.kit.entertainment.common.utils.InputUtils;
 import com.netease.yunxin.kit.entertainment.common.utils.ReportUtils;
 import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.entertainment.common.utils.ViewUtils;
-import com.netease.yunxin.kit.listentogetherkit.api.NEJoinListenTogetherRoomOptions;
-import com.netease.yunxin.kit.listentogetherkit.api.NEJoinListenTogetherRoomParams;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherCallback;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherRoomListener;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherRoomListenerAdapter;
-import com.netease.yunxin.kit.listentogetherkit.api.NELiveType;
-import com.netease.yunxin.kit.listentogetherkit.api.NEVoiceRoomEndReason;
-import com.netease.yunxin.kit.listentogetherkit.api.NEVoiceRoomRole;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomInfo;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomMember;
-import com.netease.yunxin.kit.listentogetherkit.impl.utils.ScreenUtil;
+import com.netease.yunxin.kit.entertainment.common.utils.VoiceRoomUtils;
 import com.netease.yunxin.kit.listentogetherkit.ui.Constants;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.chatroom.ChatRoomMsgCreator;
@@ -74,9 +62,10 @@ import com.netease.yunxin.kit.listentogetherkit.ui.helper.AudioPlayHelper;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.ListenTogetherRoomModel;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.VoiceRoomSeat;
 import com.netease.yunxin.kit.listentogetherkit.ui.service.KeepAliveService;
+import com.netease.yunxin.kit.listentogetherkit.ui.utils.ListenTogetherUILog;
 import com.netease.yunxin.kit.listentogetherkit.ui.utils.ListenTogetherUtils;
+import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.ListenTogetherRoomViewModel;
 import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.ListenTogetherViewModel;
-import com.netease.yunxin.kit.listentogetherkit.ui.viewmodel.RoomViewModel;
 import com.netease.yunxin.kit.listentogetherkit.ui.widget.ChatRoomMsgRecyclerView;
 import com.netease.yunxin.kit.listentogetherkit.ui.widget.ListenTogetherSeatsLayout;
 import com.netease.yunxin.kit.listentogetherkit.ui.widget.SeatView;
@@ -87,6 +76,20 @@ import com.netease.yunxin.kit.ordersong.core.model.Song;
 import com.netease.yunxin.kit.ordersong.ui.NEOrderSongCallback;
 import com.netease.yunxin.kit.ordersong.ui.OrderSongDialog;
 import com.netease.yunxin.kit.ordersong.ui.viewmodel.OrderSongViewModel;
+import com.netease.yunxin.kit.voiceroomkit.api.NEJoinVoiceRoomOptions;
+import com.netease.yunxin.kit.voiceroomkit.api.NEJoinVoiceRoomParams;
+import com.netease.yunxin.kit.voiceroomkit.api.NELiveType;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomAudioOutputDevice;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomCallback;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomEndReason;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomListener;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomListenerAdapter;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomRole;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomBatchRewardTarget;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomInfo;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomMember;
+import com.netease.yunxin.kit.voiceroomkit.impl.utils.ScreenUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -95,13 +98,13 @@ import org.jetbrains.annotations.NotNull;
 
 /** 主播与观众基础页，包含所有的通用UI元素 */
 public abstract class ListenTogetherBaseActivity extends BaseActivity
-    implements ViewTreeObserver.OnGlobalLayoutListener, PermissionUtils.FullCallback {
+    implements ViewTreeObserver.OnGlobalLayoutListener, Permission.PermissionCallback {
 
   public static final String TAG = "ListenTogetherBaseActivity";
 
   public static final String TAG_REPORT_PAGE = "page_listentogether_detail";
 
-  private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+  private final String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
   private static final int KEY_BOARD_MIN_SIZE = SizeUtils.dp2px(80);
 
@@ -117,7 +120,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
   protected static final int MORE_ITEM_AUDIO = 3; // 伴音
 
   protected static final int MORE_ITEM_FINISH = 4; // 更多菜单 结束房间
-
+  protected List<ChatRoomMoreDialog.MoreItem> moreItems;
   protected TextView tvRoomName;
 
   protected TextView tvMemberCount;
@@ -140,14 +143,12 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
 
   private View rootView;
 
-  private View announcement;
-
   private boolean joinRoomSuccess = false;
 
   protected ListenTogetherRoomModel voiceRoomInfo;
 
-  protected RoomViewModel roomViewModel;
-  protected ListenTogetherViewModel listenTogetherViewModel;
+  protected ListenTogetherRoomViewModel roomViewModel;
+  protected ListenTogetherViewModel viewModel;
 
   protected AudioPlayHelper audioPlay;
 
@@ -181,21 +182,23 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
           new BluetoothHeadsetUtil.BluetoothHeadsetStatusObserver() {
             @Override
             public void connect() {
-              if (!BluetoothHeadsetUtil.hasBluetoothConnectPermission()) {
-                BluetoothHeadsetUtil.requestBluetoothConnectPermission();
+              if (!BluetoothHeadsetUtil.hasBluetoothConnectPermission(
+                  ListenTogetherBaseActivity.this)) {
+                BluetoothHeadsetUtil.requestBluetoothConnectPermission(
+                    ListenTogetherBaseActivity.this);
               }
             }
 
             @Override
             public void disconnect() {}
           };
-  private NEListenTogetherRoomListener roomListener =
-      new NEListenTogetherRoomListenerAdapter() {
+  private final NEVoiceRoomListener roomListener =
+      new NEVoiceRoomListenerAdapter() {
         @Override
         public void onMemberAudioMuteChanged(
-            @NotNull NEListenTogetherRoomMember member,
+            @NotNull NEVoiceRoomMember member,
             boolean mute,
-            @org.jetbrains.annotations.Nullable NEListenTogetherRoomMember operateBy) {
+            @org.jetbrains.annotations.Nullable NEVoiceRoomMember operateBy) {
           if (ListenTogetherUtils.isMySelf(member.getAccount())) {
             ivLocalAudioSwitch.setSelected(mute);
             getMoreItems().get(ListenTogetherBaseActivity.MORE_ITEM_MICRO_PHONE).setEnable(!mute);
@@ -209,6 +212,17 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
           } else {
             audienceSeatInfo.isMute = mute;
             seatsLayout.setAudienceSeatInfo(audienceSeatInfo);
+          }
+        }
+
+        @Override
+        public void onAudioOutputDeviceChanged(@NonNull NEVoiceRoomAudioOutputDevice device) {
+          ListenTogetherUILog.i(TAG, "onAudioOutputDeviceChanged device = " + device);
+          if (device != NEVoiceRoomAudioOutputDevice.BLUETOOTH_HEADSET
+              && device != NEVoiceRoomAudioOutputDevice.WIRED_HEADSET) {
+            moreItems.get(MORE_ITEM_EAR_BACK).setEnable(false);
+            chatRoomMoreDialog.updateData();
+            enableEarBack(false);
           }
         }
       };
@@ -225,7 +239,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
           case MORE_ITEM_EAR_BACK:
             {
               if (DeviceUtils.hasEarBack(this)) {
-                boolean isEarBackEnable = NEListenTogetherKit.getInstance().isEarbackEnable();
+                boolean isEarBackEnable = NEVoiceRoomKit.getInstance().isEarbackEnable();
                 if (enableEarBack(!isEarBackEnable) == 0) {
                   item.enable = !isEarBackEnable;
                   dialog.updateData();
@@ -248,11 +262,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
               if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
               }
-              new ChatRoomAudioDialog(
-                      ListenTogetherBaseActivity.this,
-                      audioPlay,
-                      audioPlay.getAudioMixingMusicInfos())
-                  .show();
+              new ChatRoomAudioDialog(ListenTogetherBaseActivity.this, audioPlay).show();
               break;
             }
           case MORE_ITEM_FINISH:
@@ -281,10 +291,9 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
       finish();
       return;
     }
-    ImmersionBar.with(this).statusBarDarkFont(false).init();
-    roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+    roomViewModel = new ViewModelProvider(this).get(ListenTogetherRoomViewModel.class);
     orderSongViewModel = new ViewModelProvider(this).get(OrderSongViewModel.class);
-    listenTogetherViewModel = new ViewModelProvider(this).get(ListenTogetherViewModel.class);
+    viewModel = new ViewModelProvider(this).get(ListenTogetherViewModel.class);
     setContentView(getContentViewID());
     initViews();
     audioPlay = new AudioPlayHelper(this);
@@ -293,14 +302,14 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
     BluetoothHeadsetUtil.registerBluetoothHeadsetStatusObserver(
         bluetoothHeadsetStatusChangeListener);
     if (BluetoothHeadsetUtil.isBluetoothHeadsetConnected()
-        && !BluetoothHeadsetUtil.hasBluetoothConnectPermission()) {
-      BluetoothHeadsetUtil.requestBluetoothConnectPermission();
+        && !BluetoothHeadsetUtil.hasBluetoothConnectPermission(ListenTogetherBaseActivity.this)) {
+      BluetoothHeadsetUtil.requestBluetoothConnectPermission(ListenTogetherBaseActivity.this);
     }
   }
 
   /** 权限检查 */
   private void requestPermissionsIfNeeded() {
-    PermissionUtils.permission(permissions).callback(this).request();
+    Permission.requirePermissions(ListenTogetherBaseActivity.this, permissions).request(this);
   }
 
   @Override
@@ -316,11 +325,14 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
   }
 
   @Override
-  public void onDenied(@NonNull List<String> deniedForever, @NonNull List<String> denied) {
+  public void onDenial(List<String> permissionsDenial, List<String> permissionDenialForever) {
     ToastUtils.INSTANCE.showShortToast(ListenTogetherBaseActivity.this, "permission failed!");
-    ALog.i(TAG, "finish onDenied");
+    ALog.i(TAG, "finish onDenial");
     finish();
   }
+
+  @Override
+  public void onException(Exception exception) {}
 
   private void initViews() {
     findBaseView();
@@ -355,7 +367,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
     if (audioPlay != null) {
       audioPlay.destroy();
     }
-    NEListenTogetherKit.getInstance().removeRoomListener(roomListener);
+    NEVoiceRoomKit.getInstance().removeVoiceRoomListener(roomListener);
     giftRender.release();
     SongPlayManager.getInstance().stop();
     unbindForegroundService();
@@ -396,14 +408,15 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
     if (baseAudioView == null) {
       throw new IllegalStateException("xml layout must include base_audio_ui.xml layout");
     }
-    int barHeight = ImmersionBar.getStatusBarHeight(this);
+    //    int barHeight = ImmersionBar.getStatusBarHeight(this);
+    int barHeight = 50;
     baseAudioView.setPadding(
         baseAudioView.getPaddingLeft(),
         baseAudioView.getPaddingTop() + barHeight,
         baseAudioView.getPaddingRight(),
         baseAudioView.getPaddingBottom());
     songOptionPanel = baseAudioView.findViewById(R.id.song_option_panel);
-    songOptionPanel.setSongPositionCallback(position -> listenTogetherViewModel.seekTo(position));
+    songOptionPanel.setSongPositionCallback(position -> viewModel.seekTo(position));
     songOptionPanel.setLoadingCallback(
         (show) -> {
           if (isAnchor) {
@@ -415,6 +428,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
           }
         });
     NEOrderSongService.INSTANCE.setRoomUuid(voiceRoomInfo.getRoomUuid());
+    NEOrderSongService.INSTANCE.setLiveRecordId(voiceRoomInfo.getLiveRecordId());
     tvRoomName = baseAudioView.findViewById(R.id.tv_chat_room_name);
     tvMemberCount = baseAudioView.findViewById(R.id.tv_chat_room_member_count);
     settingsContainer = findViewById(R.id.settings_container);
@@ -485,7 +499,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
             return edtInput;
           }
         });
-    announcement = baseAudioView.findViewById(R.id.tv_chat_room_announcement);
+    View announcement = baseAudioView.findViewById(R.id.tv_chat_room_announcement);
     announcement.setOnClickListener(
         v -> {
           NoticeDialog noticeDialog = new NoticeDialog();
@@ -509,12 +523,16 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
             if (giftDialog == null) {
               giftDialog = new GiftDialog(ListenTogetherBaseActivity.this);
             }
+            List<String> sendUserUuids = new ArrayList<>();
+            sendUserUuids.add(voiceRoomInfo.getAnchorUserUuid());
             giftDialog.show(
-                giftId ->
-                    NEListenTogetherKit.getInstance()
-                        .sendGift(
+                (giftId) ->
+                    NEVoiceRoomKit.getInstance()
+                        .sendBatchGift(
                             giftId,
-                            new NEListenTogetherCallback<Unit>() {
+                            1,
+                            sendUserUuids,
+                            new NEVoiceRoomCallback<Unit>() {
                               @Override
                               public void onSuccess(@Nullable Unit unit) {}
 
@@ -547,8 +565,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
         return;
       }
 
-      OrderSongDialog dialog =
-          new OrderSongDialog(NEListenTogetherKit.getInstance().getEffectVolume());
+      OrderSongDialog dialog = new OrderSongDialog(NEVoiceRoomKit.getInstance().getEffectVolume());
       dialog.show(getSupportFragmentManager(), TAG);
     }
   }
@@ -602,20 +619,20 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
 
   private void enterRoomInner(
       String roomUuid, String nick, String avatar, long liveRecordId, String role) {
-    NEJoinListenTogetherRoomParams params =
-        new NEJoinListenTogetherRoomParams(
+    NEJoinVoiceRoomParams params =
+        new NEJoinVoiceRoomParams(
             roomUuid, nick, avatar, NEVoiceRoomRole.Companion.fromValue(role), liveRecordId, null);
     boolean isAnchor = NEVoiceRoomRole.HOST.getValue().equals(role);
     ivGift.setVisibility(isAnchor ? View.GONE : View.VISIBLE);
     if (isAnchor) {
       updateAnchorUI(nick, avatar, true);
     }
-    NEJoinListenTogetherRoomOptions options = new NEJoinListenTogetherRoomOptions();
-    NEListenTogetherKit.getInstance()
+    NEJoinVoiceRoomOptions options = new NEJoinVoiceRoomOptions();
+    NEVoiceRoomKit.getInstance()
         .joinRoom(
             params,
             options,
-            new NEListenTogetherCallback<NEListenTogetherRoomInfo>() {
+            new NEVoiceRoomCallback<NEVoiceRoomInfo>() {
 
               @Override
               public void onFailure(int code, @Nullable String msg) {
@@ -634,7 +651,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
               }
 
               @Override
-              public void onSuccess(@Nullable NEListenTogetherRoomInfo roomInfo) {
+              public void onSuccess(@Nullable NEVoiceRoomInfo roomInfo) {
                 ALog.i(TAG, "joinRoom success");
                 if (roomInfo.getLiveModel().getAudienceCount() >= ROOM_MEMBER_MAX_COUNT) {
                   ToastUtils.INSTANCE.showShortToast(
@@ -644,7 +661,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                               ? R.string.listen_start_live_error
                               : R.string.listen_join_live_error));
                   ALog.e(TAG, "joinRoom success but The private room is full");
-                  NEListenTogetherKit.getInstance().leaveRoom(null);
+                  NEVoiceRoomKit.getInstance().leaveRoom(null);
                   finish();
                   return;
                 }
@@ -658,11 +675,11 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
     songOptionPanel.setRoomInfo(voiceRoomInfo);
     initDataObserver();
     roomViewModel.initDataOnJoinRoom();
-    listenTogetherViewModel.initialize(voiceRoomInfo);
+    viewModel.initialize(voiceRoomInfo);
     if (ListenTogetherUtils.isCurrentHost()) {
-      NEListenTogetherKit.getInstance().submitSeatRequest(ANCHOR_SEAT_INDEX, true, null);
+      NEVoiceRoomKit.getInstance().submitSeatRequest(ANCHOR_SEAT_INDEX, true, null);
     } else {
-      NEListenTogetherRoomMember hostMember = ListenTogetherUtils.getHost();
+      NEVoiceRoomMember hostMember = ListenTogetherUtils.getHost();
       if (hostMember != null) {
         updateAnchorUI(hostMember.getName(), hostMember.getAvatar(), hostMember.isAudioOn());
       }
@@ -696,13 +713,13 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                 if (model.getSeatIndex() == AUDIENCE_SEAT_INDEX) {
                   audienceSeats.add(model);
                 }
-                final NEListenTogetherRoomMember member = model.getMember();
+                final NEVoiceRoomMember member = model.getMember();
                 if (member != null && ListenTogetherUtils.isHost(member.getAccount())) {
                   updateAnchorUI(member.getName(), member.getAvatar(), member.isAudioOn());
                 }
               }
               if (audienceSeats.size() == 1) {
-                NEListenTogetherRoomMember member = audienceSeats.get(0).getMember();
+                NEVoiceRoomMember member = audienceSeats.get(0).getMember();
                 if (member != null) {
                   audienceSeatInfo.isOnSeat = true;
                   audienceSeatInfo.nickname = member.getName();
@@ -724,7 +741,11 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
 
     roomViewModel
         .getChatRoomMsgData()
-        .observe(this, charSequence -> rcyChatMsgList.appendItem(charSequence));
+        .observe(
+            this,
+            charSequence -> {
+              rcyChatMsgList.appendItem(charSequence);
+            });
 
     roomViewModel
         .getErrorData()
@@ -748,24 +769,35 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
               }
             });
 
-    roomViewModel.rewardData.observe(
+    roomViewModel.bachRewardData.observe(
         this,
-        reward -> {
+        batchReward -> {
           if (voiceRoomInfo == null) {
             return;
           }
-          rcyChatMsgList.appendItem(
-              ChatRoomMsgCreator.createGiftReward(
-                  ListenTogetherBaseActivity.this,
-                  reward.getSendNick(),
-                  1,
-                  GiftCache.getGift(reward.getGiftId()).getStaticIconResId()));
-          if (!ListenTogetherUtils.isCurrentHost()) {
-            giftRender.addGift(GiftCache.getGift(reward.getGiftId()).getDynamicIconResId());
+          ALog.i(TAG, "bachRewardData observe giftModel:" + batchReward);
+          List<NEVoiceRoomBatchRewardTarget> targets = batchReward.getTargets();
+          if (targets.isEmpty()) {
+            return;
+          }
+          for (NEVoiceRoomBatchRewardTarget target : targets) {
+            CharSequence batchGiftReward =
+                ChatRoomMsgCreator.createBatchGiftReward(
+                    ListenTogetherBaseActivity.this,
+                    batchReward.getUserName(),
+                    target.getUserName(),
+                    GiftCache.getGift(batchReward.getGiftId()).getName(),
+                    batchReward.getGiftCount(),
+                    GiftCache.getGift(batchReward.getGiftId()).getStaticIconResId());
+            rcyChatMsgList.appendItem(batchGiftReward);
+            ALog.i(TAG, "target:" + target);
+          }
+          if (!VoiceRoomUtils.isLocalAnchor()) {
+            giftRender.addGift(GiftCache.getGift(batchReward.getGiftId()).getDynamicIconResId());
           }
         });
 
-    listenTogetherViewModel
+    viewModel
         .getPlayCurrentSongData()
         .observe(
             this,
@@ -778,8 +810,9 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
               songModel.setChannel(orderSong.channel);
               songModel.setSongTime(orderSong.songTime);
               songModel.setSinger(orderSong.singer);
-              songModel.setStatus(orderSong.songStatus);
-              boolean isPlaying = orderSong.songStatus == ListenTogetherConstant.SONG_PLAYING_STATE;
+              songModel.setStatus(orderSong.musicStatus);
+              boolean isPlaying =
+                  orderSong.musicStatus == ListenTogetherConstant.SONG_PLAYING_STATE;
               seatsLayout.showAnim(isPlaying);
               songOptionPanel.setPauseOrResumeState(isPlaying);
               songOptionPanel.startPlay(
@@ -796,7 +829,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                   });
             });
 
-    listenTogetherViewModel
+    viewModel
         .getShowSongPanelData()
         .observe(
             this,
@@ -804,11 +837,11 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
               showSongOptionPanel(aBoolean);
             });
 
-    listenTogetherViewModel
+    viewModel
         .getChatRoomMsgData()
         .observe(this, charSequence -> rcyChatMsgList.appendItem(charSequence));
 
-    listenTogetherViewModel
+    viewModel
         .getShowOtherSongDownLoadingData()
         .observe(
             this,
@@ -821,7 +854,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                 seatsLayout.setAnchorSeatInfo(anchorSeatInfo);
               }
             });
-    listenTogetherViewModel
+    viewModel
         .getShowMySongDownLoadingData()
         .observe(
             this,
@@ -834,7 +867,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                 seatsLayout.setAudienceSeatInfo(audienceSeatInfo);
               }
             });
-    listenTogetherViewModel
+    viewModel
         .getPlayStateChangedData()
         .observe(
             this,
@@ -848,7 +881,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
               }
             });
 
-    listenTogetherViewModel
+    viewModel
         .getDeleteSongData()
         .observe(
             this,
@@ -868,7 +901,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
     roomViewModel.audienceAvatarAnimation.observe(
         this, show -> seatsLayout.showAudienceAvatarAnimal(show));
 
-    NEListenTogetherKit.getInstance().addRoomListener(roomListener);
+    NEVoiceRoomKit.getInstance().addVoiceRoomListener(roomListener);
   }
 
   private void showSongOptionPanel(boolean show) {
@@ -884,9 +917,9 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
 
   protected final void leaveRoom() {
     if (ListenTogetherUtils.isCurrentHost()) {
-      NEListenTogetherKit.getInstance()
+      NEVoiceRoomKit.getInstance()
           .endRoom(
-              new NEListenTogetherCallback<Unit>() {
+              new NEVoiceRoomCallback<Unit>() {
                 @Override
                 public void onSuccess(@Nullable Unit unit) {
                   ALog.i(TAG, "endRoom success");
@@ -902,14 +935,14 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                 }
               });
     } else {
-      NEListenTogetherKit.getInstance()
+      NEVoiceRoomKit.getInstance()
           .leaveSeat(
-              new NEListenTogetherCallback<Unit>() {
+              new NEVoiceRoomCallback<Unit>() {
                 @Override
                 public void onSuccess(@Nullable Unit unit) {
-                  NEListenTogetherKit.getInstance()
+                  NEVoiceRoomKit.getInstance()
                       .leaveRoom(
-                          new NEListenTogetherCallback<Unit>() {
+                          new NEVoiceRoomCallback<Unit>() {
                             @Override
                             public void onSuccess(@Nullable Unit unit) {
                               ALog.i(TAG, "leaveRoom success");
@@ -929,9 +962,9 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
                 @Override
                 public void onFailure(int code, @Nullable String msg) {
                   ALog.e(TAG, "leaveSeat onFailure code:" + code + ",msg:" + msg);
-                  NEListenTogetherKit.getInstance()
+                  NEVoiceRoomKit.getInstance()
                       .leaveRoom(
-                          new NEListenTogetherCallback<Unit>() {
+                          new NEVoiceRoomCallback<Unit>() {
                             @Override
                             public void onSuccess(@Nullable Unit unit) {
                               ALog.i(TAG, "leaveRoom success");
@@ -953,7 +986,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
 
   protected final void toggleMuteLocalAudio() {
     if (!joinRoomSuccess) return;
-    NEListenTogetherRoomMember localMember = NEListenTogetherKit.getInstance().getLocalMember();
+    NEVoiceRoomMember localMember = NEVoiceRoomKit.getInstance().getLocalMember();
     if (localMember == null) return;
     boolean isAudioOn = localMember.isAudioOn();
     ALog.d(
@@ -964,7 +997,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
             + localMember.isAudioBanned());
     if (isAudioOn) {
       muteMyAudio(
-          new NEListenTogetherCallback<Unit>() {
+          new NEVoiceRoomCallback<Unit>() {
             @Override
             public void onSuccess(@Nullable Unit unit) {
               ToastUtils.INSTANCE.showShortToast(
@@ -976,7 +1009,7 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
           });
     } else {
       unmuteMyAudio(
-          new NEListenTogetherCallback<Unit>() {
+          new NEVoiceRoomCallback<Unit>() {
             @Override
             public void onSuccess(@Nullable Unit unit) {
               ToastUtils.INSTANCE.showShortToast(
@@ -990,14 +1023,14 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
   }
 
   protected void setAudioCaptureVolume(int volume) {
-    NEListenTogetherKit.getInstance().adjustRecordingSignalVolume(volume);
+    NEVoiceRoomKit.getInstance().adjustRecordingSignalVolume(volume);
   }
 
   protected int enableEarBack(boolean enable) {
     if (enable) {
-      return NEListenTogetherKit.getInstance().enableEarback(earBack);
+      return NEVoiceRoomKit.getInstance().enableEarback(earBack);
     } else {
-      return NEListenTogetherKit.getInstance().disableEarback();
+      return NEVoiceRoomKit.getInstance().disableEarback();
     }
   }
 
@@ -1007,10 +1040,10 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
       ToastUtils.INSTANCE.showShortToast(this, getString(R.string.listen_chat_message_tips));
       return;
     }
-    NEListenTogetherKit.getInstance()
+    NEVoiceRoomKit.getInstance()
         .sendTextMessage(
             content,
-            new NEListenTogetherCallback<Unit>() {
+            new NEVoiceRoomCallback<Unit>() {
               @Override
               public void onSuccess(@Nullable Unit unit) {
                 rcyChatMsgList.appendItem(
@@ -1057,12 +1090,17 @@ public abstract class ListenTogetherBaseActivity extends BaseActivity
     giftRender.init(gifAnimationView);
   }
 
-  public void unmuteMyAudio(NEListenTogetherCallback<Unit> callback) {
-    NEListenTogetherKit.getInstance().unmuteMyAudio(callback);
+  public void unmuteMyAudio(NEVoiceRoomCallback<Unit> callback) {
+    NEVoiceRoomKit.getInstance().unmuteMyAudio(callback);
   }
 
-  public void muteMyAudio(NEListenTogetherCallback<Unit> callback) {
-    NEListenTogetherKit.getInstance().muteMyAudio(callback);
+  public void muteMyAudio(NEVoiceRoomCallback<Unit> callback) {
+    NEVoiceRoomKit.getInstance().muteMyAudio(callback);
+  }
+
+  @Override
+  protected boolean needTransparentStatusBar() {
+    return true;
   }
 
   private void bindForegroundService() {

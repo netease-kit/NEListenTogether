@@ -6,7 +6,7 @@ package com.netease.yunxin.kit.listentogetherkit.ui.model;
 
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomMember;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomMember;
 import java.io.Serializable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +28,7 @@ public class VoiceRoomUser implements Serializable {
     this.avatar = avatar;
   }
 
-  public VoiceRoomUser(NEListenTogetherRoomMember member) {
+  public VoiceRoomUser(NEVoiceRoomMember member) {
     this.account = member.getAccount();
     this.nick = member.getName();
     this.avatar = member.getAvatar();

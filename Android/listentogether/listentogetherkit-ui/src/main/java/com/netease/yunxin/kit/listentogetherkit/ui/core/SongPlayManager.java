@@ -5,10 +5,10 @@
 package com.netease.yunxin.kit.listentogetherkit.ui.core;
 
 import com.netease.yunxin.kit.alog.ALog;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomCreateAudioEffectOption;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomRtcAudioStreamType;
 import com.netease.yunxin.kit.listentogetherkit.ui.core.constant.ListenTogetherConstant;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomCreateAudioEffectOption;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomRtcAudioStreamType;
 
 /** 音乐播放控制管理类 */
 public class SongPlayManager {
@@ -26,8 +26,8 @@ public class SongPlayManager {
 
   public void start(String filePath, long position) {
     ALog.i(TAG, "start,filePath:" + filePath + ",position:" + position);
-    NEListenTogetherRoomCreateAudioEffectOption option =
-        new NEListenTogetherRoomCreateAudioEffectOption(
+    NEVoiceRoomCreateAudioEffectOption option =
+        new NEVoiceRoomCreateAudioEffectOption(
             filePath,
             1,
             false,
@@ -36,26 +36,26 @@ public class SongPlayManager {
             100,
             position,
             ListenTogetherConstant.PROGRESS_INTERVAL,
-            NEListenTogetherRoomRtcAudioStreamType.NERtcAudioStreamTypeSub);
-    NEListenTogetherKit.getInstance().playEffect(EFFECT_ID, option);
+            NEVoiceRoomRtcAudioStreamType.NERtcAudioStreamTypeSub);
+    NEVoiceRoomKit.getInstance().playEffect(EFFECT_ID, option);
     isPlaying = true;
   }
 
   public void pause() {
     ALog.i(TAG, "pause");
-    NEListenTogetherKit.getInstance().pauseEffect(EFFECT_ID);
+    NEVoiceRoomKit.getInstance().pauseEffect(EFFECT_ID);
     isPlaying = false;
   }
 
   public void resume() {
     ALog.i(TAG, "resume");
-    NEListenTogetherKit.getInstance().resumeEffect(EFFECT_ID);
+    NEVoiceRoomKit.getInstance().resumeEffect(EFFECT_ID);
     isPlaying = true;
   }
 
   public void stop() {
     ALog.i(TAG, "stop");
-    NEListenTogetherKit.getInstance().stopEffect(EFFECT_ID);
+    NEVoiceRoomKit.getInstance().stopEffect(EFFECT_ID);
     isPlaying = false;
   }
 
@@ -65,6 +65,6 @@ public class SongPlayManager {
 
   public void setVolume(int volume) {
     ALog.i(TAG, "setVolume,volume:" + volume);
-    NEListenTogetherKit.getInstance().setEffectVolume(EFFECT_ID, volume);
+    NEVoiceRoomKit.getInstance().setEffectVolume(EFFECT_ID, volume);
   }
 }

@@ -4,23 +4,23 @@
 
 package com.netease.yunxin.kit.listentogetherkit.ui.utils;
 
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomMember;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomSeatItem;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomSeatItemStatus;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEVoiceRoomOnSeatType;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.VoiceRoomSeat;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomMember;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomOnSeatType;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomSeatItem;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomSeatItemStatus;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeatUtils {
 
   public static String getCurrentUuid() {
-    return NEListenTogetherKit.getInstance().getLocalMember().getAccount();
+    return NEVoiceRoomKit.getInstance().getLocalMember().getAccount();
   }
 
   public static String getMemberNick(String uuid) {
-    NEListenTogetherRoomMember member = ListenTogetherUtils.getMember(uuid);
+    NEVoiceRoomMember member = ListenTogetherUtils.getMember(uuid);
     if (member != null) {
       return member.getName();
     }
@@ -28,19 +28,19 @@ public class SeatUtils {
   }
 
   public static List<VoiceRoomSeat> transNESeatItem2VoiceRoomSeat(
-      List<NEListenTogetherRoomSeatItem> neSeatItemList) {
+      List<NEVoiceRoomSeatItem> neSeatItemList) {
     List<VoiceRoomSeat> onSeatList = new ArrayList<>();
-    for (NEListenTogetherRoomSeatItem item : neSeatItemList) {
-      NEListenTogetherRoomMember user = getMember(item.getUser());
+    for (NEVoiceRoomSeatItem item : neSeatItemList) {
+      NEVoiceRoomMember user = getMember(item.getUser());
       int status;
       switch (item.getStatus()) {
-        case NEListenTogetherRoomSeatItemStatus.WAITING:
+        case NEVoiceRoomSeatItemStatus.WAITING:
           status = VoiceRoomSeat.Status.APPLY;
           break;
-        case NEListenTogetherRoomSeatItemStatus.CLOSED:
+        case NEVoiceRoomSeatItemStatus.CLOSED:
           status = VoiceRoomSeat.Status.CLOSED;
           break;
-        case NEListenTogetherRoomSeatItemStatus.TAKEN:
+        case NEVoiceRoomSeatItemStatus.TAKEN:
           status = VoiceRoomSeat.Status.ON;
           break;
         default:
@@ -60,11 +60,10 @@ public class SeatUtils {
     return onSeatList;
   }
 
-  public static NEListenTogetherRoomMember getMember(String account) {
-    List<NEListenTogetherRoomMember> allMemberList =
-        NEListenTogetherKit.getInstance().getAllMemberList();
+  public static NEVoiceRoomMember getMember(String account) {
+    List<NEVoiceRoomMember> allMemberList = NEVoiceRoomKit.getInstance().getAllMemberList();
     if (!allMemberList.isEmpty()) {
-      for (NEListenTogetherRoomMember neVoiceRoomMember : allMemberList) {
+      for (NEVoiceRoomMember neVoiceRoomMember : allMemberList) {
         if (neVoiceRoomMember.getAccount().equals(account)) {
           return neVoiceRoomMember;
         }

@@ -3,7 +3,7 @@
 plugins {
     id("com.android.application") version "7.1.3" apply false
     id("com.android.library") version "7.1.3" apply false
-    kotlin("android") version "1.6.10" apply false
+    kotlin("android") version "1.8.0" apply false
 }
 
 tasks.register("clean", Delete::class) {

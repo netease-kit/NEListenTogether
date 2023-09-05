@@ -15,9 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SwitchCompat;
-import com.netease.yunxin.kit.common.utils.DeviceUtils;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
 import com.netease.yunxin.kit.listentogetherkit.ui.R;
 import com.netease.yunxin.kit.listentogetherkit.ui.helper.AudioPlayHelper;
 import com.netease.yunxin.kit.listentogetherkit.ui.widget.VolumeSetup;
@@ -53,22 +50,6 @@ public class ChatRoomMixerDialog extends BottomBaseDialog {
   protected void renderBottomView(FrameLayout parent) {
     View bottomView =
         LayoutInflater.from(getContext()).inflate(R.layout.listen_view_dialog_more_mixer, parent);
-
-    SwitchCompat earBackSwitch = bottomView.findViewById(R.id.ear_back);
-    earBackSwitch.setChecked(NEListenTogetherKit.getInstance().isEarbackEnable());
-    earBackSwitch.setOnCheckedChangeListener(
-        (buttonView, isChecked) -> {
-          if (!DeviceUtils.hasEarBack(getContext())) {
-            buttonView.setChecked(false);
-            return;
-          }
-          if (isChecked) {
-            NEListenTogetherKit.getInstance().enableEarback(earBack);
-          } else {
-            NEListenTogetherKit.getInstance().disableEarback();
-          }
-        });
-
     SeekBar skRecordingVolume = bottomView.findViewById(R.id.recording_volume_control);
     skRecordingVolume.setProgress(audioPlayHelper.getAudioCaptureVolume());
     skRecordingVolume.setOnSeekBarChangeListener(

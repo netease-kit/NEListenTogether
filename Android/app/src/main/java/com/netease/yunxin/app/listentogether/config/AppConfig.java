@@ -8,15 +8,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 public class AppConfig {
-  // 请填写您的appKey,如果您的APP是国内环境，请填写APP_KEY_MAINLAND，如果是海外环境，请填写APP_KEY_OVERSEA
-  private static final String APP_KEY_MAINLAND = "your mainland appKey"; // 国内用户填写
-  private static final String APP_KEY_OVERSEA = "your oversea appKey"; // 海外用户填写
+  private static final String APP_KEY = "your AppKey"; // 请填写应用对应的AppKey，可在云信控制台的”AppKey管理“页面获取
+  public static final String APP_SECRET =
+      "your AppSecret"; // 请填写应用对应的AppSecret，可在云信控制台的”AppKey管理“页面获取
+  public static final boolean IS_OVERSEA = false; // 如果您的AppKey为海外，填ture；如果您的AppKey为中国国内，填false
+  /** 默认的BASE_URL地址仅用于跑通体验Demo，请勿用于正式产品上线。在产品上线前，请换为您自己实际的服务端地址 */
+  public static final String BASE_URL = "https://yiyong.netease.im/"; //云信派对服务端国内的体验地址
 
-  // 获取userUuid和对应的userToken，请参考https://doc.yunxin.163.com/neroom/docs/TY1NzM5MjQ?platform=server
-  public static final String ACCOUNT = "your userUuid";
-  public static final String TOKEN = "your userToken";
-  public static final String NICKNAME = "nickname";
-
+  public static final String BASE_URL_OVERSEA = "https://yiyong-sg.netease.im/"; //云信派对服务端海外的体验地址
   private static final int ONLINE_CONFIG_ID = 570;
   private static final int OVERSEA_CONFIG_ID = 76;
 
@@ -30,15 +29,25 @@ public class AppConfig {
   }
 
   public static String getAppKey() {
-    if (isOversea()) {
-      return APP_KEY_OVERSEA;
-    } else {
-      return APP_KEY_MAINLAND;
-    }
+    return APP_KEY;
   }
 
   public static boolean isOversea() {
-    return false;
+    return IS_OVERSEA;
+  }
+
+  public static String getBaseUrl() {
+    if (isOversea()) {
+      return BASE_URL_OVERSEA;
+    }
+    return BASE_URL;
+  }
+
+  public static String getNERoomServerUrl() {
+    if (isOversea()) {
+      return "oversea";
+    }
+    return "online";
   }
 
   public static int getListenTogetherConfigId() {

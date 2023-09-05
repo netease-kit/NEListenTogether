@@ -5,40 +5,39 @@ package com.netease.yunxin.kit.listentogetherkit.ui.utils;
 
 import android.text.TextUtils;
 import com.netease.yunxin.kit.entertainment.common.model.RoomModel;
-import com.netease.yunxin.kit.listentogetherkit.api.NEListenTogetherKit;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomInfo;
-import com.netease.yunxin.kit.listentogetherkit.api.model.NEListenTogetherRoomMember;
 import com.netease.yunxin.kit.listentogetherkit.ui.Constants;
 import com.netease.yunxin.kit.listentogetherkit.ui.model.VoiceRoomSeat;
+import com.netease.yunxin.kit.voiceroomkit.api.NEVoiceRoomKit;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomInfo;
+import com.netease.yunxin.kit.voiceroomkit.api.model.NEVoiceRoomMember;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListenTogetherUtils {
 
   public static boolean isCurrentHost() {
-    return NEListenTogetherKit.getInstance().getLocalMember() != null
+    return NEVoiceRoomKit.getInstance().getLocalMember() != null
         && TextUtils.equals(
-            NEListenTogetherKit.getInstance().getLocalMember().getRole(), Constants.ROLE_HOST);
+            NEVoiceRoomKit.getInstance().getLocalMember().getRole(), Constants.ROLE_HOST);
   }
 
   public static boolean isMySelf(String uuid) {
-    return NEListenTogetherKit.getInstance().getLocalMember() != null
-        && TextUtils.equals(NEListenTogetherKit.getInstance().getLocalMember().getAccount(), uuid);
+    return NEVoiceRoomKit.getInstance().getLocalMember() != null
+        && TextUtils.equals(NEVoiceRoomKit.getInstance().getLocalMember().getAccount(), uuid);
   }
 
   public static boolean isHost(String uuid) {
-    NEListenTogetherRoomMember member = getMember(uuid);
+    NEVoiceRoomMember member = getMember(uuid);
     if (member == null) {
       return false;
     }
     return TextUtils.equals(member.getRole(), Constants.ROLE_HOST);
   }
 
-  public static NEListenTogetherRoomMember getMember(String uuid) {
-    List<NEListenTogetherRoomMember> allMemberList =
-        NEListenTogetherKit.getInstance().getAllMemberList();
+  public static NEVoiceRoomMember getMember(String uuid) {
+    List<NEVoiceRoomMember> allMemberList = NEVoiceRoomKit.getInstance().getAllMemberList();
     for (int i = 0; i < allMemberList.size(); i++) {
-      NEListenTogetherRoomMember member = allMemberList.get(i);
+      NEVoiceRoomMember member = allMemberList.get(i);
       if (TextUtils.equals(member.getAccount(), uuid)) {
         return member;
       }
@@ -46,11 +45,10 @@ public class ListenTogetherUtils {
     return null;
   }
 
-  public static NEListenTogetherRoomMember getHost() {
-    List<NEListenTogetherRoomMember> allMemberList =
-        NEListenTogetherKit.getInstance().getAllMemberList();
+  public static NEVoiceRoomMember getHost() {
+    List<NEVoiceRoomMember> allMemberList = NEVoiceRoomKit.getInstance().getAllMemberList();
     for (int i = 0; i < allMemberList.size(); i++) {
-      NEListenTogetherRoomMember member = allMemberList.get(i);
+      NEVoiceRoomMember member = allMemberList.get(i);
       if (TextUtils.equals(member.getRole(), Constants.ROLE_HOST)) {
         return member;
       }
@@ -59,7 +57,7 @@ public class ListenTogetherUtils {
   }
 
   public static boolean isMute(String uuid) {
-    NEListenTogetherRoomMember member = getMember(uuid);
+    NEVoiceRoomMember member = getMember(uuid);
     if (member != null) {
       return !member.isAudioOn();
     }
@@ -76,30 +74,30 @@ public class ListenTogetherUtils {
   }
 
   public static String getCurrentName() {
-    if (NEListenTogetherKit.getInstance().getLocalMember() == null) {
+    if (NEVoiceRoomKit.getInstance().getLocalMember() == null) {
       return "";
     }
-    return NEListenTogetherKit.getInstance().getLocalMember().getName();
+    return NEVoiceRoomKit.getInstance().getLocalMember().getName();
   }
 
   public static String getCurrentAccount() {
-    if (NEListenTogetherKit.getInstance().getLocalMember() == null) {
+    if (NEVoiceRoomKit.getInstance().getLocalMember() == null) {
       return "";
     }
-    return NEListenTogetherKit.getInstance().getLocalMember().getAccount();
+    return NEVoiceRoomKit.getInstance().getLocalMember().getAccount();
   }
 
   public static List<RoomModel> neListenTogetherRoomInfos2RoomInfos(
-      List<NEListenTogetherRoomInfo> listenTogetherRoomInfos) {
+      List<NEVoiceRoomInfo> listenTogetherRoomInfos) {
     List<RoomModel> result = new ArrayList<>();
-    for (NEListenTogetherRoomInfo listenTogetherRoomInfo : listenTogetherRoomInfos) {
+    for (NEVoiceRoomInfo listenTogetherRoomInfo : listenTogetherRoomInfos) {
       result.add(neListenTogetherRoomInfo2RoomInfo(listenTogetherRoomInfo));
     }
     return result;
   }
 
   public static RoomModel neListenTogetherRoomInfo2RoomInfo(
-      NEListenTogetherRoomInfo listenTogetherRoomInfo) {
+      NEVoiceRoomInfo listenTogetherRoomInfo) {
     if (listenTogetherRoomInfo == null) {
       return null;
     }
