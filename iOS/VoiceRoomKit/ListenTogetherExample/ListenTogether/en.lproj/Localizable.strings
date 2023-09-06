@@ -5,6 +5,8 @@
 DisplayName = "CommsEase Party";
 Version = "Version";
 
+Listen_Together_Sample = "CommsEase Party - Listen Together\nSample App";
+
 Recreation = "Apps";
 Personal_Center = "Profile";
 

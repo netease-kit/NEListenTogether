@@ -129,7 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
   lazy var loginView:NELoginSampleView = {
       let loginView = NELoginSampleView(frame: UIScreen.main.bounds)
       loginView.setIcon(UIImage(named: "voiceroom_login") ?? UIImage())
-      loginView.setTitle("DisplayName".localized)
+      loginView.setTitle("Listen_Together_Sample".localized)
       loginView.loginCallBack = { _ in
           self.baseInit(){ loginSuccess in
               if(loginSuccess){
