@@ -5,6 +5,8 @@
 DisplayName = "网易云信派对";
 Version = "当前版本号";
 
+Listen_Together_Sample = "云信派对-一起听业务\n源码跑通示例";
+
 Recreation = "娱乐社交";
 Personal_Center = "个人中心";
 
