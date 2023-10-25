@@ -193,7 +193,7 @@ extension AppDelegate {
     var listenExtras = extras
     listenExtras["baseUrl"] = Configs.voiceRoomBaseUrl
     config.extras = listenExtras
-    NEListenTogetherUIManager.sharedInstance().initialize(with: config, callback: callback)
+    NEListenTogetherUIManager.sharedInstance().initialize(with: config, configId: Configs.listenTogetherConfigId, callback: callback)
     NEListenTogetherUIManager.sharedInstance().delegate = self
   }
   
