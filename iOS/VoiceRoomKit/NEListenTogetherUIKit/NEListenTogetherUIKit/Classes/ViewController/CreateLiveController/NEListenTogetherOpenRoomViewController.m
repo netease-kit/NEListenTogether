@@ -112,11 +112,7 @@
   params.liveType = NEVoiceRoomLiveRoomTypeListenTogether;
   params.seatCount = 2;
   params.cover = self.createRoomNameView.getRoomBgImageUrl;
-  params.configId = 570;
-  if ([[[NEListenTogetherUIManager sharedInstance].config.extras objectForKey:@"serverUrl"]
-          isEqualToString:@"https://roomkit-sg.netease.im"]) {
-    params.configId = 76;
-  }
+  params.configId = NEListenTogetherUIManager.sharedInstance.configId;
 
   [[NEVoiceRoomKit getInstance]
       createRoom:params

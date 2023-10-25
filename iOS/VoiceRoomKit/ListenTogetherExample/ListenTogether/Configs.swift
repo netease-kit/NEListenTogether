@@ -25,6 +25,10 @@ enum Configs {
   static var orderSongBaseUrl: String {
     IS_OVERSEA ? BASE_URL_OVERSEA : BASE_URL
   }
+  
+  static var listenTogetherConfigId: Int {
+    IS_OVERSEA ? 76 : 570
+  }
 
   static var loginSampleBaseUrl: String {
     IS_OVERSEA ? BASE_URL_OVERSEA : BASE_URL
