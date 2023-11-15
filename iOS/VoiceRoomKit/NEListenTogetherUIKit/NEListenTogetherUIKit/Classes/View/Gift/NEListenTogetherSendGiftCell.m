@@ -5,6 +5,7 @@
 #import "NEListenTogetherSendGiftCell.h"
 #import "NEListenTogetherGlobalMacro.h"
 #import "UIImage+ListenTogether.h"
+@import NESocialUIKit;
 
 @interface NEListenTogetherSendGiftCell ()
 
@@ -43,13 +44,13 @@
   }
 }
 
-- (void)installWithModel:(NEListenTogetherUIGiftModel *)model {
-  self.icon.image = [UIImage voiceRoom_imageNamed:model.icon];
+- (void)installWithModel:(NESocialGiftModel *)model {
+  self.icon.image = model.icon;
   self.info.attributedText = [self descriptionWithGift:model];
   self.info.textAlignment = NSTextAlignmentCenter;
 }
 
-- (NSAttributedString *)descriptionWithGift:(NEListenTogetherUIGiftModel *)gift {
+- (NSAttributedString *)descriptionWithGift:(NESocialGiftModel *)gift {
   NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
   style.minimumLineHeight = 20;
   style.maximumLineHeight = 20;
@@ -64,10 +65,10 @@
     NSForegroundColorAttributeName : HEXCOLOR(0x666666),
     NSParagraphStyleAttributeName : style
   };
-  NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:gift.display
-                                                                          attributes:displayDic];
+  NSMutableAttributedString *res =
+      [[NSMutableAttributedString alloc] initWithString:gift.displayName attributes:displayDic];
   NSAttributedString *price = [[NSAttributedString alloc]
-      initWithString:[NSString stringWithFormat:NSLocalizedString(@"\n(%d云币)", nil), gift.price]
+      initWithString:[NSString stringWithFormat:NSLocalizedString(@"\n(%zd云币)", nil), gift.price]
           attributes:priceDic];
   [res appendAttributedString:price];
   return [res copy];
@@ -75,13 +76,12 @@
 
 + (NEListenTogetherSendGiftCell *)cellWithCollectionView:(UICollectionView *)collectionView
                                                indexPath:(NSIndexPath *)indexPath
-                                                   datas:(NSArray<NEListenTogetherUIGiftModel *> *)
-                                                             datas {
+                                                   datas:(NSArray<NESocialGiftModel *> *)datas {
   NEListenTogetherSendGiftCell *cell = [collectionView
       dequeueReusableCellWithReuseIdentifier:[NEListenTogetherSendGiftCell description]
                                 forIndexPath:indexPath];
   if ([datas count] > indexPath.row) {
-    NEListenTogetherUIGiftModel *gift = datas[indexPath.row];
+    NESocialGiftModel *gift = datas[indexPath.row];
     [cell installWithModel:gift];
   }
   return cell;

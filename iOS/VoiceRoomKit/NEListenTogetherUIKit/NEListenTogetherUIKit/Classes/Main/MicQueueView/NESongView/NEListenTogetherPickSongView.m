@@ -135,15 +135,7 @@
   }];
 }
 - (void)initPickSongView {
-  UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-  UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
-  effectView.backgroundColor = [UIColor colorWithRed:0.192 green:0.239 blue:0.235 alpha:0.5];
-  //  [self addSubview:effectView];
-  //  [effectView mas_makeConstraints:^(MASConstraintMaker *make) {
-  //    make.left.right.top.bottom.equalTo(self);
-  //  }];
   self.backgroundColor = [UIColor whiteColor];
-  //    [UIColor karaoke_colorWithHex:color_313D3C];
   // 顶部视图
   self.mainTopView = [[UIButton alloc] init];
   [self addSubview:self.mainTopView];
@@ -480,6 +472,8 @@
     if (singer) {
       cell.anchorLabel.text =
           [NSString stringWithFormat:@"%@:%@", NELocalizedString(@"歌手"), singer.singerName];
+    } else {
+      cell.anchorLabel.text = nil;
     }
     if (item.channel == CLOUD_MUSIC) {
       cell.resourceImageView.image =
@@ -547,11 +541,16 @@
     }
     cell.cancelButton.hidden = NO;
     cell.clickCancel = ^{
+      // 正在删除就不允许删除
+      if ([[NEOrderSong getInstance] isSongDeleting:item.orderSong.orderId]) {
+        return;
+      }
       // 点击取消
       [[NEOrderSong getInstance]
           deleteSongWithOrderId:item.orderSong.orderId
                        callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
-                         if (code != 0) {
+                         // 1008表示已经删过了
+                         if (code != 0 && code != 1008) {
                            [NEListenTogetherToast
                                showToast:[NSString
                                              stringWithFormat:@"%@ %@",
@@ -591,6 +590,10 @@
     /// 已点列表
     NEOrderSongResponse *item =
         [NEListenTogetherPickSongEngine sharedInstance].pickedSongArray[indexPath.row];
+    // 正在删除就不允许选中
+    if ([[NEOrderSong getInstance] isSongDeleting:item.orderSong.orderId]) {
+      return;
+    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(nextSong:)]) {
       [self.delegate nextSong:item.orderSong];
     }

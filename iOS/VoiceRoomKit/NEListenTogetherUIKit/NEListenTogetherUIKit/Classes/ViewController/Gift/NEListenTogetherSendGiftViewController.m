@@ -19,9 +19,9 @@
 /// 发送按钮
 @property(nonatomic, strong) UIButton *sendBtn;
 /// 礼物数组
-@property(nonatomic, strong) NSArray<NEListenTogetherUIGiftModel *> *gifts;
+@property(nonatomic, strong) NSArray<NESocialGiftModel *> *gifts;
 /// 选中的礼物
-@property(nonatomic, strong) NEListenTogetherUIGiftModel *selectedGift;
+@property(nonatomic, strong) NESocialGiftModel *selectedGift;
 
 @property(nonatomic, strong) CAGradientLayer *buttonBackground;
 
@@ -48,7 +48,7 @@
 
 - (instancetype)init {
   if ([super init]) {
-    self.gifts = [NEListenTogetherUIGiftModel defaultGifts];
+    self.gifts = [NESocialGiftModel defaultGifts];
   }
   return self;
 }

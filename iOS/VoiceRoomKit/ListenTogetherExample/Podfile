@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 # 引入配置文件
 require_relative '../../PodConfigs/config_third.rb'
@@ -28,18 +28,20 @@ target 'ListenTogether' do
   pod 'NEListenTogetherUIKit', :path => '../NEListenTogetherUIKit/NEListenTogetherUIKit.podspec'
   pod 'NEOrderSong', :path => '../NEOrderSong/NEOrderSong.podspec'
   pod 'LottieSwift', :path => '../../third_party/lottie/LottieSwift.podspec'
-  pod 'NESocialUIKit', :path => '../NESocialUIKit/NESocialUIKit.podspec'
+  pod 'NESocialUIKit', :path => '../../Party/NESocialUIKit/NESocialUIKit.podspec'
+  pod 'NEAudioEffectKit', :path => '../../KaraokeKit/NEAudioEffectKit/NEAudioEffectKit.podspec'
+  pod 'NEVoiceRoomBaseUIKit', :path => '../NEVoiceRoomBaseUIKit/NEVoiceRoomBaseUIKit.podspec'
 
 
 #登录
-  pod 'NELoginSample',:path => '../NELoginSample/NELoginSample.podspec'
+  pod 'NELoginSample',:path => '../../OneOnOne/NELoginSample/NELoginSample.podspec'
 
 #发布需要打开
 #远端依赖
 pod NERoomKit.Special_All , NERoomKit.version
 pod NECopyrightedMedia.name , NECopyrightedMedia.version
 pod NECommonKit.name , NECommonKit.version
-pod NECoreKit.name , NECoreKit.version
+pod NECoreKit.name , '9.6.4'
 pod IHProgressHUD.name
 pod NECommonUIKit.name , NECommonUIKit.version
 

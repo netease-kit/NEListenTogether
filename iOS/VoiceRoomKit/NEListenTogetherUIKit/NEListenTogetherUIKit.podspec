@@ -31,7 +31,6 @@ Pod::Spec.new do |s|
     s.dependency SDWebImage.name
     s.dependency NECopyrightedMedia.name
     s.dependency NELyricUIKit.name
-    s.dependency NEAudioEffectKit.name
     s.dependency LottieSwift.name
     s.dependency NECoreKit.name
     s.dependency NESocialUIKit.name
@@ -39,6 +38,8 @@ Pod::Spec.new do |s|
     s.dependency NEOrderSong.name
     s.dependency NEVoiceRoomKit.name
     s.dependency BlocksKit.name
+    s.dependency NEAudioEffectKit.name
+    s.dependency NEVoiceRoomBaseUIKit.name
   else
 
   end

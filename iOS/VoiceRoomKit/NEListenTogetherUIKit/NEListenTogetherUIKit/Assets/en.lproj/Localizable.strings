@@ -160,6 +160,7 @@
 "聊天室" = "Chat room";
 
 "是否退出当前房间进入其他房间" = "Exit the current room and join another room";
+"是否退出当前房间，并创建新房间" = "Exit the current room and create a new room";
 
 "确认结束直播？" = "Are you sure you want to end the stream?";
 "请确认是否结束直播" = "End the live stream";
