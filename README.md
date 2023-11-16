@@ -39,3 +39,4 @@
 - [PK连麦](https://github.com/netease-kit/OnlinePK)
 - [在线教育](https://github.com/netease-kit/WisdomEducation)
 - [多人视频通话](https://github.com/netease-kit/NEGroupCall)
+- [云信娱乐社交服务端 Nemo](https://github.com/netease-kit/nemo)
