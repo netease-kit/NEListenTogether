@@ -155,11 +155,7 @@
     [textView resignFirstResponder];
     return NO;
   }
-  if (textView.text.length >= text.length) {
-    return YES;
-  }
-  NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
-  return newString.length <= 20;  // 限制 20字符
+  return textView.text.length + (text.length - range.length) <= 20;
 }
 
 #pragma mark - lazyMethod
@@ -219,7 +215,6 @@
     _contentTextView.textColor = UIColor.whiteColor;
     _contentTextView.font = [UIFont systemFontOfSize:14];
     _contentTextView.delegate = self;
-    _contentTextView.text = NELocalizedString(@"随机");
   }
   return _contentTextView;
 }

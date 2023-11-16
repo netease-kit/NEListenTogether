@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+#import <NEOrderSong/NEOrderSong-Swift.h>
 #import <SDWebImage/SDWebImage.h>
 #import "NEListenTogetherInnerSingleton.h"
 #import "NEListenTogetherLocalized.h"
@@ -15,6 +16,8 @@
 #import "NEVoiceRoomKit/NEVoiceRoomKit-Swift.h"
 #import "NSArray+NEListenTogetherUIExtension.h"
 #import "UIView+NEListenTogetherUIToast.h"
+@import NEOrderSong;
+
 @implementation NEListenTogetherViewController (Utils)
 - (void)joinRoom {
   self.roomHeaderView.title = self.detail.liveModel.liveTopic;
@@ -42,6 +45,8 @@
           [weakSelf closeRoom];
           return;
         }
+        // 版权设置为听歌场景
+        [[NEOrderSong getInstance] setSongScene:TYPE_LISTENING_TO_MUSIC];
         // 开启音量上报
         [NEVoiceRoomKit.getInstance enableAudioVolumeIndicationWithEnable:true interval:1000];
         [[NEOrderSong getInstance] configRoomSetting:weakSelf.detail.liveModel.roomUuid

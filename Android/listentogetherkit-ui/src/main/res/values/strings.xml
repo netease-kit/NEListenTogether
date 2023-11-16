@@ -1,0 +1,78 @@
+<resources>
+    <!--******************************************************************-->
+    <string name="listen_together">一起听</string>
+    <string name="listen_mic">麦克风</string>
+    <string name="listen_earback">耳返</string>
+    <string name="listen_mixer">调音台</string>
+    <string name="listen_mixing">音效</string>
+    <string name="listen_end">结束</string>
+    <string name="listen_cancel">取消</string>
+    <string name="listen_sure">确认</string>
+    <string name="listen_leave_room">退出房间</string>
+    <string name="listen_operate_fail">操作失败</string>
+    <string name="listen_notify">通知</string>
+    <string name="listen_get_it">知道了</string>
+    <string name="listen_chat_message_tips">聊天室信息不能为空</string>
+    <string name="listen_people_online">在线%s人</string>
+    <string name="listen_host_close_room">该房间已被主播解散</string>
+    <string name="listen_mic_off">话筒已关闭</string>
+    <string name="listen_mic_on">话筒已打开</string>
+    <string name="listen_no_mute_members">暂无禁言成员</string>
+    <string name="listen_seat">麦位%d</string>
+    <string name="listen_enter_room">进入直播间</string>
+    <string name="listen_bgm">音效</string>
+    <string name="listen_mixing_play_error">伴音播放错误</string>
+    <string name="listen_more">更多</string>
+    <string name="listen_select_member">选择成员</string>
+    <string name="listen_already_seat">已上麦</string>
+    <string name="listen_down_seat">已下麦</string>
+    <string name="listen_notice_tips">本应用为示例产品，请勿商用。</string>
+    <string name="listen_notice">公告</string>
+    <string name="listen_loading_fail">加载失败</string>
+    <string name="listen_loading">加载中...</string>
+    <string name="listen_chat_hint">一起聊聊吧~</string>
+    <string name="listen_applause">鼓掌声</string>
+    <string name="listen_laughter">笑声</string>
+    <string name="listen_earback_tip">插入耳机后可使用耳返功能</string>
+    <string name="listen_voice">人声</string>
+    <string name="listen_bnacking">伴奏</string>
+    <string name="listen_capture_volume">采集音量</string>
+    <string name="listen_confirm_to_cancel">确认取消申请上麦</string>
+    <string name="listen_dowmseat">下麦</string>
+    <string name="listen_net_disconnected">网络异常，请稍后重试</string>
+    <string name="listen_host_close_room_success">房间解散成功</string>
+
+
+
+    <string name="listen_end_live_title">确认结束直播？</string>
+    <string name="listen_end_live_tips">请确认是否结束直播</string>
+
+    <string name="listen_start_live_error">开启语聊房失败</string>
+    <string name="listen_join_live_error">私密房内人数已满</string>
+
+
+    <string name="listen_glow_stick">荧光棒</string>
+    <string name="listen_arrange">安排</string>
+    <string name="listen_sports_car">跑车</string>
+    <string name="listen_rockets">火箭</string>
+    <string name="listen_send_gift">送礼物</string>
+    <string name="listen_send">发送</string>
+    <string name="listen_coin">coins</string>
+    <string name="listen_reward_failed">打赏礼物失败</string>
+    <string name="listen_donate">赠送了</string>
+    <string name="listen_count">个</string>
+    <string name="listen_song">听听歌</string>
+    <string name="listen_pause">暂停</string>
+    <string name="listen_play">播放</string>
+    <string name="listen_next_song">切歌</string>
+    <string name="listen_first_seat">麦位1</string>
+    <string name="listen_song_loading">歌曲加载中</string>
+    <string name="listen_song_ordered">点了歌曲《%s》</string>
+    <string name="listen_song_deleted">删除了歌曲《%s》</string>
+    <string name="listen_song_switched">已切歌</string>
+    <string name="listen_song_pause">暂停了歌曲《%s》</string>
+    <string name="listen_song_start">正在播放歌曲《%s》</string>
+
+    <string name="voiceroom_empty_roomname_tips">房间名称为空</string>
+    <string name="voiceroom_click_create_room_tips">是否退出当前房间，并创建新房间</string>
+</resources>

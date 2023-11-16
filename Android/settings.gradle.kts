@@ -32,8 +32,9 @@ dependencyResolutionManagement {
 }
 
 include(":app")
-include(":voiceroomkit:voiceroomkit")
-include(":listentogether:listentogetherkit-ui")
-include(":entertainment:entertainment-common")
-include(":ordersong:ordersong")
+include(":voiceroomkit")
+include(":voiceroomkit-ui-base")
+include(":listentogetherkit-ui")
+include(":entertainment-common")
+include(":ordersong")
 

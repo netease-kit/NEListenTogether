@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #import <UIKit/UIKit.h>
-#import "NEListenTogetherUIGiftModel.h"
+@import NESocialUIKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -12,8 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 实例化直播列表页cell
 + (NEListenTogetherSendGiftCell *)cellWithCollectionView:(UICollectionView *)collectionView
                                                indexPath:(NSIndexPath *)indexPath
-                                                   datas:(NSArray<NEListenTogetherUIGiftModel *> *)
-                                                             datas;
+                                                   datas:(NSArray<NESocialGiftModel *> *)datas;
 
 /// 计算直播列表页cell size
 + (CGSize)size;

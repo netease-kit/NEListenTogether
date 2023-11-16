@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #import "NEListenTogetherUIConnectListView.h"
-#import <NEUIKit/NEUICommon.h>
 #import <NEUIKit/UIColor+NEUIExtension.h>
 #import <NEUIKit/UIView+NEUIExtension.h>
 #import "NEListenTogetherLocalized.h"
@@ -58,7 +57,7 @@ static CGFloat foldBtnHeight = 38;
   self.foldBtn.hidden = YES;
   [UIView animateWithDuration:0.25
                    animations:^{
-                     self.bottom = [NEUICommon ne_statusBarHeight] + connectAlertViewHeight;
+                     self.bottom = [NEListenTogetherUI ne_statusBarHeight] + connectAlertViewHeight;
                    }];
   self.listViewPushed = NO;
   [self.connectAlertView refreshAlertView:self.listViewPushed];
@@ -84,7 +83,7 @@ static CGFloat foldBtnHeight = 38;
 - (void)dismissListView {
   [UIView animateWithDuration:0.25
       animations:^{
-        self.bottom = [NEUICommon ne_statusBarHeight] + connectAlertViewHeight;
+        self.bottom = [NEListenTogetherUI ne_statusBarHeight] + connectAlertViewHeight;
       }
       completion:^(BOOL finished) {
         self.listView.hidden = YES;
@@ -158,7 +157,7 @@ static CGFloat foldBtnHeight = 38;
 
 - (CGFloat)barHeight {
   return self.listViewHeight + connectAlertViewHeight + titleLabelHeight +
-         [NEUICommon ne_statusBarHeight];
+         [NEListenTogetherUI ne_statusBarHeight];
 }
 
 #pragma mark - <UITableViewDelegate, UITableViewDataSource>

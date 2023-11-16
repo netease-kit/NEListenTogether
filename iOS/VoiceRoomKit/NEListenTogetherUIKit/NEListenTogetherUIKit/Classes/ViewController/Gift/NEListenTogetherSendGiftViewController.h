@@ -3,13 +3,13 @@
 // found in the LICENSE file.
 
 #import <UIKit/UIKit.h>
-#import "NEListenTogetherUIGiftModel.h"
+@import NESocialUIKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol NEListenTogetherSendGiftViewtDelegate <NSObject>
 
-- (void)didSendGift:(NEListenTogetherUIGiftModel *)gift;
+- (void)didSendGift:(NESocialGiftModel *)gift;
 
 @end
 

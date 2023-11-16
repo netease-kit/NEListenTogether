@@ -7,11 +7,11 @@
 #import "NEListenTogetherGlobalMacro.h"
 #import "NEListenTogetherLyricView.h"
 #import "NEListenTogetherUI.h"
-#import "NEListenToghtherSlider.h"
+
 @interface NEListenTogetherLyricActionView ()
 @property(nonatomic, strong) NEListenTogetherLyricView *lyricView;
 @property(nonatomic, strong) UILabel *titleLabel;
-@property(nonatomic, strong) NEListenToghtherSlider *slider;
+@property(nonatomic, strong) UISlider *slider;
 @property(nonatomic, assign) BOOL sliding;
 @property(nonatomic, strong) UILabel *currentTimeLabel;
 @property(nonatomic, strong) UILabel *leftTimeLabel;
@@ -137,9 +137,9 @@
   }
   return _currentTimeLabel;
 }
-- (NEListenToghtherSlider *)slider {
+- (UISlider *)slider {
   if (!_slider) {
-    _slider = [NEListenToghtherSlider new];
+    _slider = [UISlider new];
     [_slider addTarget:self
                   action:@selector(sliderValueChanged:forEvent:)
         forControlEvents:UIControlEventValueChanged];

@@ -25,6 +25,8 @@
 #import "NEListenTogetherViewController+Utils.h"
 #import "UIColor+NEUIExtension.h"
 #import "UIImage+ListenTogether.h"
+@import NEVoiceRoomBaseUIKit;
+@import NESocialUIKit;
 
 @interface NEListenTogetherViewController () <NEListenTogetherHeaderDelegate,
                                               NEListenTogetherFooterFunctionAreaDelegate,
@@ -41,7 +43,7 @@
                                               NEOrderSongListener>
 
 @property(nonatomic, strong) NEListenTogetherPickSongView *pickSongView;
-@property(nonatomic, strong) NSArray *defaultGifts;
+@property(nonatomic, strong) NSArray<NESocialGiftModel *> *defaultGifts;
 @end
 
 @implementation NEListenTogetherViewController
@@ -51,9 +53,14 @@
     self.role = role;
     self.context.role = role;
     self.audioManager = [[NEAudioEffectManager alloc] init];
-    self.defaultGifts = [NEListenTogetherUIGiftModel defaultGifts];
+    self.defaultGifts = [NESocialGiftModel defaultGifts];
   }
   return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)dealloc {
@@ -81,7 +88,6 @@
   self.playingStatus = PlayingStatus_default;
   self.playingAction = PlayingAction_default;
   // Do any additional setup after loading the view.
-  self.ne_UINavigationItem.navigationBarHidden = YES;
   [NEVoiceRoomKit.getInstance addVoiceRoomListener:self];
   [[NEOrderSong getInstance] addOrderSongListener:self];
   [self addSubviews];
@@ -224,7 +230,7 @@
 
 #pragma mark------------------------ NEListenTogetherSendGiftViewtDelegate ------------------------
 
-- (void)didSendGift:(NEListenTogetherUIGiftModel *)gift {
+- (void)didSendGift:(NESocialGiftModel *)gift {
   if (![self checkNetwork]) {
     return;
   }
@@ -272,7 +278,9 @@
                  model.sender = NEListenTogetherUIManager.sharedInstance.nickname;
                  model.text = text;
                  if (self.role == NEVoiceRoomRoleHost) {
-                   model.icon = [NEListenTogetherUI ne_listen_imageName:@"anthor_ico"];
+                   model.iconSize = CGSizeMake(32, 16);
+                   model.icon = [NEVRBaseBundle loadImage:[NEVRBaseBundle localized:@"Owner_Icon"
+                                                                              value:nil]];
                  } else {
                    model.icon = nil;
                  }
@@ -368,7 +376,8 @@
     model.sender = message.fromNick;
     model.text = message.text;
     if ([message.fromUserUuid isEqualToString:self.detail.liveModel.userUuid]) {
-      model.icon = [NEListenTogetherUI ne_listen_imageName:@"anthor_ico"];
+      model.iconSize = CGSizeMake(32, 16);
+      model.icon = [NEVRBaseBundle loadImage:[NEVRBaseBundle localized:@"Owner_Icon" value:nil]];
     } else {
       model.icon = nil;
     }
@@ -379,18 +388,16 @@
 - (void)onReceiveBatchGiftWithGiftModel:(NEVoiceRoomBatchGiftModel *)giftModel {
   // 展示礼物动画
   NSString *giftDisplay;
-  for (NEListenTogetherUIGiftModel *model in self.defaultGifts) {
+  for (NESocialGiftModel *model in self.defaultGifts) {
     if (model.giftId == giftModel.giftId) {
-      giftDisplay = model.display;
+      giftDisplay = model.displayName;
       break;
     }
   }
   NSMutableArray *messages = [NSMutableArray array];
   for (NEVoiceRoomBatchSeatUserRewardee *userRewardee in giftModel.rewardeeUsers) {
     NESocialChatroomRewardMessage *message = [[NESocialChatroomRewardMessage alloc] init];
-    message.giftImage = [NEListenTogetherUI
-        ne_listen_imageName:[NEListenTogetherUIGiftModel getRewardWithGiftId:giftModel.giftId]
-                                .icon];
+    message.giftImage = [NESocialGiftModel getGiftWithGiftId:giftModel.giftId].icon;
     message.giftImageSize = CGSizeMake(20, 20);
     message.sender = giftModel.rewarderUserName;
     message.receiver = userRewardee.userName;
@@ -559,7 +566,8 @@
 - (NEListenTogetherKeyboardToolbarView *)keyboardView {
   if (!_keyboardView) {
     _keyboardView = [[NEListenTogetherKeyboardToolbarView alloc]
-        initWithFrame:CGRectMake(0, [NEUICommon ne_screenHeight], [NEUICommon ne_screenWidth], 50)];
+        initWithFrame:CGRectMake(0, UIScreen.mainScreen.bounds.size.height,
+                                 UIScreen.mainScreen.bounds.size.width, 50)];
     _keyboardView.backgroundColor = UIColor.whiteColor;
     _keyboardView.cusDelegate = self;
   }
@@ -824,7 +832,8 @@
                         chorusId:nil
                              ext:nil
                         callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
-                          if (code != 0) {
+                          // 1007表示歌曲不存在
+                          if (code != 0 && code != 1007) {
                             [NEListenTogetherToast
                                 showToast:[NSString stringWithFormat:@"%@：%@",
                                                                      NELocalizedString(
@@ -953,24 +962,25 @@
           sendChatroomNotifyMessage:[NSString stringWithFormat:@"%@ %@", song.operatorUser.userName,
                                                                NELocalizedString(@"已切歌")]];
       // 选定歌曲切
-      NEOrderSongResponse *nextSong = [NEOrderSongResponse yx_modelWithJSON:song.attachment];
-      [NEListenTogetherUILog
-          infoLog:ListenTogetherUILog
-             desc:[NSString stringWithFormat:@"选定歌曲切歌 --- %@", nextSong.orderSong.songId]];
-      if (nextSong) {
-        if ([[NEOrderSong getInstance] isSongPreloaded:nextSong.orderSong.songId
-                                               channel:(int)nextSong.orderSong.oc_channel]) {
-          [self readySongModel:nextSong.orderSong.orderId];
+      NSData *stringData = [song.attachment dataUsingEncoding:NSUTF8StringEncoding];
+      NSError *err;
+      NSDictionary *attach = [NSJSONSerialization JSONObjectWithData:stringData
+                                                             options:NSJSONReadingMutableContainers
+                                                               error:&err];
+      NSString *songId = attach[@"songId"];
+      NSInteger channel = [attach[@"channel"] integerValue];
+      NSInteger orderId = [attach[@"orderId"] integerValue];
+      [NEListenTogetherUILog infoLog:ListenTogetherUILog
+                                desc:[NSString stringWithFormat:@"选定歌曲切歌 --- %@", songId]];
+      if (songId.length) {
+        if ([[NEOrderSong getInstance] isSongPreloaded:songId channel:(SongChannel)channel]) {
+          [self readySongModel:orderId];
         } else {
           self.playingAction = PlayingAction_switchSong;
-          [[NEOrderSong getInstance] preloadSong:nextSong.orderSong.songId
-                                         channel:(int)nextSong.orderSong.oc_channel
-                                         observe:self];
+          [[NEOrderSong getInstance] preloadSong:songId channel:(SongChannel)channel observe:self];
         }
       } else {
-        [NEListenTogetherUILog infoLog:ListenTogetherUILog
-                                  desc:[NSString stringWithFormat:@"选定歌曲切歌数据为空 --- %@",
-                                                                  nextSong.orderSong.songId]];
+        [NEListenTogetherUILog infoLog:ListenTogetherUILog desc:@"选定歌曲切歌数据为空"];
       }
     }
 
@@ -1170,11 +1180,17 @@
 
 - (void)nextSong:(NEOrderSongResponseOrderSongModel *_Nullable)orderSongModel {
   if (orderSongModel) {
+    NSMutableDictionary *attach = [NSMutableDictionary new];
+    if (orderSongModel.songId.length) {
+      attach[@"songId"] = orderSongModel.songId;
+    }
+    attach[@"channel"] = [NSNumber numberWithInteger:orderSongModel.oc_channel];
+    attach[@"orderId"] = [NSNumber numberWithInteger:orderSongModel.orderId];
     /// 选的某首歌曲
     [[NEOrderSong getInstance]
         nextSongWithOrderId:[NEListenTogetherPickSongEngine sharedInstance]
                                 .currrentSongModel.playMusicInfo.orderId
-                 attachment:orderSongModel.yx_modelToJSONString
+                 attachment:attach.yx_modelToJSONString
                    callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj){
 
                    }];

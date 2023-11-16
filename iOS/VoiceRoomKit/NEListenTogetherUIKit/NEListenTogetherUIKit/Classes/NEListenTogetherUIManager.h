@@ -47,7 +47,6 @@ typedef NS_ENUM(NSInteger, NEListenTogetherClientEvent) {
 @property(nonatomic, strong) NEVoiceRoomKitConfig *config;
 //
 @property(nonatomic, assign) NSInteger configId;
-
 + (NEListenTogetherUIManager *)sharedInstance;
 
 - (void)initializeWithConfig:(NEVoiceRoomKitConfig *)config

@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #import "NEListenTogetherChatroomMicCell.h"
-#import <NEUIKit/NEUICommon.h>
 #import <NEUIKit/UIColor+NEUIExtension.h>
 #import <NEUIKit/UIView+NEUIExtension.h>
 #import "NEListenTogetherGlobalMacro.h"
@@ -70,7 +69,7 @@
 + (CGSize)size {
   CGFloat paddingW = [self cellPaddingW];
   CGFloat width =
-      ([NEUICommon ne_screenWidth] - [NEListenTogetherUI margin] * 2 - 3 * paddingW) / 4;
+      (UIScreen.mainScreen.bounds.size.width - [NEListenTogetherUI margin] * 2 - 3 * paddingW) / 4;
   CGFloat height = width + 6 + 18;
   return CGSizeMake(width, height);
 }

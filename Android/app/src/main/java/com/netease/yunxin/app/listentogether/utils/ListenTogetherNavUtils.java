@@ -51,7 +51,7 @@ public class ListenTogetherNavUtils {
 
   public static void toListenTogetherRoomListPage(Context context) {
     if (!NetworkUtils.isConnected()) {
-      ToastX.showShortToast(context.getString(R.string.app_network_error));
+      ToastX.showShortToast(context.getString(R.string.network_error));
       return;
     }
     Intent intent = new Intent(context, ListenTogetherRoomListActivity.class);

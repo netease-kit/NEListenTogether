@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #import <NEAudioEffectKit/NEAudioEffectManager.h>
-#import <NEUIKit/NEUICommon.h>
 #import <NEVoiceRoomKit/NEVoiceRoomKit-Swift.h>
 #import "NEListenTogetherAnimationView.h"
 #import "NEListenTogetherContext.h"

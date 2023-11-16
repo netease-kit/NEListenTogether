@@ -2,7 +2,6 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-#import <NEUIKit/NEUICommon.h>
 #import <NEUIKit/UIColor+NEUIExtension.h>
 #import <NEUIKit/UIView+NEUIExtension.h>
 #import "NEListenTogetherLocalized.h"
@@ -58,7 +57,7 @@ static NSInteger KNEListenTogetherToastBarTag = 111;
   [self addSubview:bar];
   [UIView animateWithDuration:0.25
                    animations:^{
-                     bar.top = [NEUICommon ne_statusBarHeight];
+                     bar.top = [NEListenTogetherUI ne_statusBarHeight];
                    }];
 }
 

@@ -132,7 +132,5 @@
 - (void)clickCanCelButton:(UIButton *)sender {
   self.clickCancel();
 }
-//- (void)clickTopButton:(UIButton *)sender {
-//  self.clickTop();
-//}
+
 @end

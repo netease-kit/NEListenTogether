@@ -54,7 +54,7 @@
 
 - (void)onVoiceRoomAuthEvent:(enum NEVoiceRoomAuthEvent)event {
   if ([self.delegate respondsToSelector:@selector(onListenTogetherClientEvent:)]) {
-    [self.delegate onListenTogetherClientEvent:event];
+    [self.delegate onListenTogetherClientEvent:(NEListenTogetherClientEvent)event];
   }
 }
 

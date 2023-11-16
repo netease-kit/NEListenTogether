@@ -9,24 +9,24 @@
 #import "NEListenTogetherGlobalMacro.h"
 #import "NEListenTogetherLocalized.h"
 #import "NEListenTogetherOpenRoomViewController.h"
-#import "NEListenTogetherRoomListViewModel.h"
 #import "NEListenTogetherToast.h"
 #import "NEListenTogetherUI.h"
 #import "NEListenTogetherUIDeviceSizeInfo.h"
-#import "NEListenTogetherUIEmptyListView.h"
 #import "NEListenTogetherUILiveListCell.h"
 #import "NEListenTogetherUIManager.h"
 #import "NEListenTogetherUIViewFactory.h"
 #import "NEListenTogetherViewController.h"
 #import "NSString+NEListenTogetherString.h"
 #import "UIView+NEUIExtension.h"
+@import NESocialUIKit;
+@import NEVoiceRoomBaseUIKit;
 
 @interface NEListenTogetherRoomListViewController () <UICollectionViewDelegate,
                                                       UICollectionViewDataSource>
 @property(nonatomic, strong) UICollectionView *collectionView;
 @property(nonatomic, strong) UIButton *createLiveRoomButton;
-@property(nonatomic, strong) NEListenTogetherUIEmptyListView *emptyView;
-@property(nonatomic, strong) NEListenTogetherRoomListViewModel *roomListViewModel;
+@property(nonatomic, strong) NESocialRoomListEmptyView *emptyView;
+@property(nonatomic, strong) NEVRBaseRoomListViewModel *roomListViewModel;
 @property(nonatomic, assign) BOOL hasEntered;
 /// 是否已进入房间，亦可做防重点击
 @property(nonatomic, assign) BOOL isEnterRoom;
@@ -38,10 +38,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  //  if (!self.hasEntered) {
-  //    [self getNewData];
-  //  }
-  //  self.hasEntered = YES;
+  [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)viewDidLoad {
@@ -55,7 +52,7 @@
 }
 
 - (void)getNewData {
-  [self.roomListViewModel requestNewDataWithLiveType:NEVoiceRoomLiveRoomTypeListenTogether];
+  [self.roomListViewModel requestNewData];
 }
 - (void)bindViewModel {
   __weak typeof(self) weakSelf = self;
@@ -75,8 +72,10 @@
 
   self.roomListViewModel.errorChanged = ^(NSError *_Nonnull error) {
     if (!error || ![error isKindOfClass:[NSError class]]) return;
-    if (error.code == 1003) {
+    if (error.code == NEVRBaseRoomListViewModel.EMPTY_LIST_ERROR) {
       [NEListenTogetherToast showToast:NELocalizedString(@"直播列表为空")];
+    } else if (error.code == NEVRBaseRoomListViewModel.NO_NETWORK_ERROR) {
+      [NEListenTogetherToast showToast:NELocalizedString(@"网络异常，请稍后重试")];
     } else {
       NSString *msg =
           error.userInfo[NSLocalizedDescriptionKey] ?: NELocalizedString(@"请求直播列表错误");
@@ -107,7 +106,7 @@
 
   __weak typeof(self) weakSelf = self;
   MJRefreshGifHeader *mjHeader = [MJRefreshGifHeader headerWithRefreshingBlock:^{
-    [weakSelf.roomListViewModel requestNewDataWithLiveType:NEVoiceRoomLiveRoomTypeListenTogether];
+    [weakSelf.roomListViewModel requestNewData];
   }];
   [mjHeader setTitle:NELocalizedString(@"下拉更新") forState:MJRefreshStateIdle];
   [mjHeader setTitle:NELocalizedString(@"下拉更新") forState:MJRefreshStatePulling];
@@ -121,8 +120,7 @@
       [NEListenTogetherToast showToast:NELocalizedString(@"无更多内容")];
       [weakSelf.collectionView.mj_footer endRefreshing];
     } else {
-      [weakSelf.roomListViewModel
-          requestMoreDataWithLiveType:NEVoiceRoomLiveRoomTypeListenTogether];
+      [weakSelf.roomListViewModel requestMoreData];
     }
   }];
 }
@@ -254,16 +252,17 @@
   return _createLiveRoomButton;
 }
 
-- (NEListenTogetherUIEmptyListView *)emptyView {
+- (NESocialRoomListEmptyView *)emptyView {
   if (!_emptyView) {
-    _emptyView = [[NEListenTogetherUIEmptyListView alloc] initWithFrame:CGRectZero];
+    _emptyView = [[NESocialRoomListEmptyView alloc] initWithFrame:CGRectZero];
   }
   return _emptyView;
 }
 
-- (NEListenTogetherRoomListViewModel *)roomListViewModel {
+- (NEVRBaseRoomListViewModel *)roomListViewModel {
   if (!_roomListViewModel) {
-    _roomListViewModel = [[NEListenTogetherRoomListViewModel alloc] init];
+    _roomListViewModel =
+        [[NEVRBaseRoomListViewModel alloc] initWithLiveType:NEVoiceRoomLiveRoomTypeListenTogether];
   }
   return _roomListViewModel;
 }

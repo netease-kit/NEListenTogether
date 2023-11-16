@@ -43,10 +43,14 @@
   return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
   // Do any additional setup after loading the view.
-  self.ne_UINavigationItem.navigationBarHidden = YES;
   [self setupSubviews];
 }
 
@@ -63,7 +67,7 @@
   [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
     make.size.mas_equalTo(CGSizeMake(24, 24));
     make.left.mas_equalTo(20);
-    make.top.equalTo(self.view).offset([NEUICommon ne_statusBarHeight] + 10);
+    make.top.equalTo(self.view).offset([NEListenTogetherUI ne_statusBarHeight] + 10);
   }];
   [self.openLiveButton mas_makeConstraints:^(MASConstraintMaker *make) {
     make.left.mas_equalTo(20);
@@ -119,20 +123,20 @@
          options:[[NECreateVoiceRoomOptions alloc] init]
         callback:^(NSInteger code, NSString *_Nullable msg, NEVoiceRoomInfo *_Nullable obj) {
           [NEListenTogetherToast hideLoading];
-          if (code == 0) {
+          dispatch_async(dispatch_get_main_queue(), ^{
             self.clickOpenButton = NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == 0) {
               NEListenTogetherViewController *vc =
                   [[NEListenTogetherViewController alloc] initWithRole:NEVoiceRoomRoleHost
                                                                 detail:obj];
               [self.navigationController pushViewController:vc animated:true];
-            });
-          } else {
-            [NEListenTogetherToast
-                showToast:[NSString stringWithFormat:@"%@ %zd %@",
-                                                     NELocalizedString(@"加入直播间失败"), code,
-                                                     msg]];
-          }
+            } else {
+              [NEListenTogetherToast
+                  showToast:[NSString stringWithFormat:@"%@ %zd %@",
+                                                       NELocalizedString(@"加入直播间失败"), code,
+                                                       msg]];
+            }
+          });
         }];
 
   //    NTESPlanChooseAlertView *chooseAlertView = [[NTESPlanChooseAlertView alloc]
