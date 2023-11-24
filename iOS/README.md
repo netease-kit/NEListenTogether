@@ -3,6 +3,7 @@
 ## 开发环境
 
 在开始运行示例项目之前，请确保开发环境满足以下要求：
+
 | 环境要求                                                        | 说明                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 |  iOS 版本  |  11.0 及以上的 iPhone 或者 iPad 真机   |
@@ -13,6 +14,7 @@
 ## 前提条件
 
 请确认您已完成以下操作：
+
 - [已创建应用并获取AppKey](https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console)
 - [已开通IM 即时通讯、聊天室、音视频通话2.0 和 NERoom 房间组件](https://doc.yunxin.163.com/group-voice-room/docs/DM4NzM1Mzk?platform=iOS)
 - [已配置 NERoom 的消息抄送地址（http://yiyong.netease.im/nemo/entertainmentLive/nim/notify）](https://doc.yunxin.163.com/docs/zU3Mjk0MTk/zYxNzIzMTE?platformId=121094)
@@ -24,17 +26,19 @@
 ## 运行示例项目
 
 > **注意**：
->- 语聊房的示例源码仅供开发者接入参考，实际应用开发场景中，请结合具体业务需求修改使用。
 
+>- 语聊房的示例源码仅供开发者接入参考，实际应用开发场景中，请结合具体业务需求修改使用。
 >- 若您计划将源码用于生产环境，请确保应用正式上线前已经过全面测试，以免因兼容性等问题造成损失。
 
 
 
   
-1. 克隆[语聊房示例项目源码](https://github.com/netease-kit/NEChatroom/tree/master/iOS)仓库至您本地工程。
-    > **注意**：
-    > 
-    >示例项目源码请存放至全英文的路径下。
+1. 克隆[语聊房示例项目源码](https://github.com/netease-kit/NEListenTogether)仓库至您本地工程。
+
+
+> **注意**：
+
+>示例项目源码请存放至全英文的路径下。
     
 
 2. 打开终端，在 `iOS/VoiceRoomKit/ListenTogetherExample` 中执行如下命令进行安装：
@@ -61,10 +65,11 @@
     ```
 
 
-    > **注意**：
-    >- 获取 AppKey 和 AppSecret 的方法请参见<a href="https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console#获取-appkey" target="_blank">创建应用并获取 AppKey</a>。
-    >- BASE_URL 地址 `https://yiyong.netease.im`和BASE_URL_OVERSEA 地址 `https://yiyong-sg.netease.im`为云信派对服务端体验地址，该地址仅用于体验 Demo，单次最大体验时长为1小时，**请勿用于生产环境**。
-    >- 如果您的应用的 AppKey 为海外，`IS_OVERSEA` 的值请设置为 `ture`。
+> **注意**：
+> 
+>- 获取 AppKey 和 AppSecret 的方法请参见<a href="https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console#获取-appkey" target="_blank">创建应用并获取 AppKey</a>。
+>- BASE_URL 地址 `https://yiyong.netease.im`和BASE_URL_OVERSEA 地址 `https://yiyong-sg.netease.im`为云信派对服务端体验地址，该地址仅用于体验 Demo，单次最大体验时长为1小时，**请勿用于生产环境**。
+>- 如果您的应用的 AppKey 为海外，`IS_OVERSEA` 的值请设置为 `ture`。
  
  
 
@@ -80,81 +85,19 @@
 
 
 ```
-┌── NEVoiceRoomKit                      # 一起听基于NERoom封装组件
-│   ├── NEVoiceRoomKit  
-│   │   ├── NEVoiceRoomKit              # 单例对象
-│   │   ├── NEVoiceRoomKit+Auth         # 单例对象拓展登录相关接口
-│   │   ├── NEVoiceRoomKit+Message      # 单例对象拓展消息相关接口
-│   │   ├── NEVoiceRoomKit+Room         # 单例对象拓展房间相关接口
-│   │   ├── NEVoiceRoomKit+Rtc          # 单例对象拓展RTC相关接口
-│   │   ├── NEVoiceRoomKit+Seat         # 单例对象拓展麦位相关接口
-│   │   └──  NEVoiceRoomKit+Preview     # 单例对象预操作相关接口
-│   │   
-│   ├── Service
-│   │   ├── NEVoiceRoomAudioPlayService     # 音乐接口具体实现
-│   │   └── NEVoiceRoomRoomService          # 房间相关具体实现
-│   │   
-│   ├── Public
-│   │   ├── NEVoiceRoomAuthListener                 # 登录监听
-│   │   ├── NEVoiceRoomPreviewListener              # 预操作监听
-│   │   ├── NEVoiceRoomListener                     # 语聊房监听
-│   │   ├── NEListenTogetherKitChorusActionType     # 业务逻辑信令定义
-│   │   ├── Common 文件夹                            # 通用定义
-│   │   ├── Message 文件夹                           # 文本消息相关model定义
-│   │   ├── Music 文件夹                             # 歌曲相关model定义
-│   │   ├── Reward 文件夹                            # 礼物相关model定义
-│   │   ├── Room 文件夹                              # 房间相关model定义
-│   │   └── Seat 文件夹                              # 麦位相关model定义
-│   │   
-├── NEOrderSong                             # 点歌台相关封装，NEVoiceroomUIKit 使用
-│    ├── NEOrderSong                        # 单例对象
-│    ├── NEOrderSong+Auth                   # 单例对象拓展登录相关接口
-│    ├── NEOrderSong+CopyrightedMedia       # 单例对象拓展版权相关接口
-│    ├── NEOrderSong+Message                # 单例对象拓展消息相关接口
-│    ├── NEOrderSong+Music                  # 单例对象拓展音乐相关接口
-│    ├── NEOrderSong+Room                   # 单例对象拓展版权相关接口
-│    ├── NEOrderSong+Song                   # 单例对象拓展播放回调接口
-│    ├── Public
-│    │   ├── NEVoiceRoomAuthListener                # 登录监听
-│    │   ├── NEVoiceRoomCopyrightedMediaListener    # 版权监听
-│    │   ├── NEVoiceRoomListener                    # 点歌台监听
-│    │   ├── Common 文件夹                           # 通用定义
-│    │   └── Music 文件夹                            # 歌曲相关model定义
-│    └── Private                    
-│        ├── NEVoiceRoomPrivateModels           # 模型定义
-│        ├── Log 文件夹                          # 日志功能
-│        ├── Network 文件夹                      # 网络功能
-│        │   └── NEVoiceRoomAPI                 # 接口定义
-│        └── Service 文件夹                             # 日志功能
-│            ├── NEVoiceRoomAudioPlayService           # 播放配置中心
-│            ├── NEVoiceRoomAudioPlayService+Delegate  # 播放扩展业务回调
-│            ├── NEVoiceRoomCopyrightedMediaService    # 版权Token相关处理
-│            ├── NEVoiceRoomMusicService               # 点歌台接口实现
-│            └── NEVoiceRoomRoomService                # Token更新接口实现
-│
-│
-│
-│
-├── NEUIKit                           # 自定义的UI拓展
-├── lottie                            # lottie 动画源码
-├── ListenTogetherExample             # 项目入口
-│
-└── NEListenTogetherUIKit
-    ├── NEListenTogetherOpenRoomViewController          # 创建语聊房视图控制器
-    │    ├── NEListenTogetherUICreateRoomNameView       # 房间名输入框
-    │    └── UIButton                                   # 创建房间按钮
-    ├── NEListenTogetherViewController                  # 语聊房视图控制器
-    │   ├── NEListenTogetherViewController+Seat         # 语聊房麦位相关逻辑
-    │   ├── NEListenTogetherViewController+UI           # 语聊房布局相关
-    │   ├── NEListenTogetherViewController+Utils        # 语聊房其他逻辑
-    │   ├── NEListenTogetherHeaderView                  # 头部视图
-    │   ├── NEListenTogetherFooterView                  # 底部工具栏，包含输入框等控件
-    │   ├── NEListenTogetherKeyboardToolbarView         # 聊天室文本输入框
-    │   ├── NEUIMicQueueView                            # 麦位视图
-    │   ├── NEListenTogetherPickSongView                # 点歌页面
-    │   ├── NEListenTogetherSongPlayControlView         # 歌曲播放控制页面
-    │   └── NEVoiceRoomInfo                             # 语聊房信息
-    └── NEListenTogetherRoomListViewController          # 语聊房列表视图控制器
-        ├── NEListenTogetherUIEmptyListView             # 空列表提示视图
-        └── NEListenTogetherUILiveListCell              # 语聊歌房信息预览
+├── KaraokeKit
+│   └── NEAudioEffectKit // 音效模块
+├── OneOnOne
+│   └── NELoginSample // 登录模块
+├── Party
+│   └── NESocialUIKit // 娱乐社交通用UI
+├── PodConfigs // cocoapos配置
+├── UIKit
+│   └── NEUIKit // 通用UI
+├── VoiceRoomKit
+│   ├── ListenTogetherExample // 一起听主工程
+│   ├── NEListenTogetherUIKit // 一起听UI
+│   ├── NEOrderSong // 点歌模块
+│   └── NEVoiceRoomKit // 语聊房模块
+└── third_party // 第三方依赖
 ```
